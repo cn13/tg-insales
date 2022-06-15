@@ -19,12 +19,17 @@ class HookController extends Controller
     {
         $m = json_decode($this->request->getRawBody(), true, 512, JSON_THROW_ON_ERROR);
         syslog(LOG_NOTICE, print_r($m, 1));
-        $result = $this->cmd->sendMessage(
-            $m['message']['chat']['id'],
-            $this->view('hello', ['name' => $m['message']['chat']['first_name']])
-        );
-
-        syslog(LOG_NOTICE, print_r($result, 1));
+        syslog(LOG_NOTICE, "SEND");
+        try {
+            $result = $this->cmd->sendMessage(
+                $m['message']['chat']['id'],
+                $this->view('hello', ['name' => $m['message']['chat']['first_name']])
+            );
+            syslog(LOG_NOTICE, print_r($result, 1));
+        } catch (\Throwable $e) {
+            syslog(LOG_NOTICE, $e->getMessage());
+        }
+        syslog(LOG_NOTICE, "END");
     }
 
     /**
