@@ -36,4 +36,12 @@ class BotController extends \yii\console\Controller
         print_r($response);
         echo PHP_EOL;
     }
+
+    public function actionGetUpdates()
+    {
+        $url = "https://api.telegram.org/bot{$this->token}/getUpdates";
+        $response = file_get_contents($url);
+        print_r($response);
+        echo PHP_EOL;
+    }
 }
