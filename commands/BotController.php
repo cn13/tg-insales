@@ -26,6 +26,7 @@ class BotController extends \yii\console\Controller
         $url = "https://api.telegram.org/bot{$this->token}/getWebhookInfo";
         $response = file_get_contents($url);
         print_r($response);
+        echo PHP_EOL;
     }
 
     public function actionSetHook()
@@ -33,5 +34,6 @@ class BotController extends \yii\console\Controller
         $url = "https://api.telegram.org/bot{$this->token}/setWebhook?url={$this->hook_url}";
         $response = file_get_contents($url);
         print_r($response);
+        echo PHP_EOL;
     }
 }
