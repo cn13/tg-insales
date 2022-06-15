@@ -15,11 +15,12 @@ class HookController extends Controller
             $this->request->getRawBody(),
             FILE_APPEND
         );
-        syslog(LOG_NOTICE, 'MESSAGE');
+
         $bot = new BotApi(Yii::$app->params['tg_token']);
 
-        $m = json_decode($this->request->getRawBody(), true);
-        $bot->sendMessage($m['message']['chat']['id'], "Принято, работаем");
+        $m = print_r(json_decode($this->request->getRawBody(), true), 1);
+        syslog(LOG_NOTICE, $m);
+        //$bot->sendMessage($m['message']['chat']['id'], "Принято, работаем");
 
         return $this->response;
     }
