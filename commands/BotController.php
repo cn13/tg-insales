@@ -24,17 +24,17 @@ class BotController extends \yii\console\Controller
 
     public function actionHookList()
     {
-        $this->cmd->send('getWebhookInfo');
+        print_r($this->cmd->send('getWebhookInfo'));
     }
 
     public function actionSetHook()
     {
-        $this->cmd->send('setWebhook', ['url' => $this->hook_url]);
+        print_r($this->cmd->send('setWebhook', ['url' => $this->hook_url]));
     }
 
     public function actionGetUpdates()
     {
-        $this->cmd->send('getUpdates');
+        print_r($this->cmd->send('getUpdates'));
     }
 
     public function actionTestMessage()

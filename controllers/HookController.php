@@ -18,6 +18,7 @@ class HookController extends Controller
     public function actionIndex()
     {
         $m = json_decode($this->request->getRawBody(), true, 512, JSON_THROW_ON_ERROR);
+        syslog(LOG_NOTICE, print_r($m, 1));
         $this->cmd->sendMessage(
             $m['message']['chat']['id'],
             $this->view('hello', ['name' => $m['message']['chat']['first_name']])
