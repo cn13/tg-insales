@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use TelegramBot\Api\BotApi;
-use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 use Yii;
 use yii\rest\Controller;
 
@@ -17,19 +16,10 @@ class HookController extends Controller
             FILE_APPEND
         );
         syslog(LOG_NOTICE, 'MESSAGE');
-        $m = json_decode($this->request->getRawBody());
-
         $bot = new BotApi(Yii::$app->params['tg_token']);
 
-        $keyboard = new InlineKeyboardMarkup(
-            [
-                [
-                    ['text' => 'link', 'url' => 'https://core.telegram.org']
-                ]
-            ]
-        );
-
-        $bot->sendMessage($m['message']['chat']['id'], "Принято, работаем", null, false, null, $keyboard);
+        $m = json_decode($this->request->getRawBody(), true);
+        $bot->sendMessage($m['message']['chat']['id'], "Принято, работаем");
 
         return $this->response;
     }
