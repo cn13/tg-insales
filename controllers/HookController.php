@@ -2,18 +2,38 @@
 
 namespace app\controllers;
 
-use TelegramBot\Api\BotApi;
-use Yii;
+use app\helpers\SendCommand;
 use yii\rest\Controller;
 
 class HookController extends Controller
 {
+    private SendCommand $cmd;
+
+    public function init()
+    {
+        $this->cmd = new SendCommand();
+        parent::init();
+    }
+
     public function actionIndex()
     {
-        $bot = new BotApi(Yii::$app->params['tg_token']);
-        $m = print_r(json_decode($this->request->getRawBody(), true), 1);
-        syslog(LOG_NOTICE, $m);
-        $bot->sendMessage('#'.$m['message']['chat']['id'], "Принято, работаем");
-        return $this->response;
+        $m = json_decode($this->request->getRawBody(), true, 512, JSON_THROW_ON_ERROR);
+        $this->cmd->sendMessage(
+            $m['message']['chat']['id'],
+            $this->view('hello', ['name' => $m['message']['chat']['first_name']])
+        );
+    }
+
+    /**
+     * @param $name
+     * @param $params
+     * @return string
+     */
+    private function view($name, $params): string
+    {
+        return $this->renderFile(
+            __DIR__ . "/../views/message/$name.php",
+            $params
+        );
     }
 }

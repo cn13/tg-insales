@@ -3,7 +3,6 @@
 namespace app\commands;
 
 use app\helpers\SendCommand;
-use TelegramBot\Api\BotApi;
 
 /**
  * @property $token string
@@ -13,13 +12,11 @@ class BotController extends \yii\console\Controller
     /**
      * @var string|null
      */
-    private ?string $token;
     private ?string $hook_url;
     private SendCommand $cmd;
 
     public function init()
     {
-        $this->token = \Yii::$app->params['tg_token'];
         $this->hook_url = \Yii::$app->params['hook_url'];
         $this->cmd = new SendCommand();
         parent::init();
@@ -42,11 +39,27 @@ class BotController extends \yii\console\Controller
 
     public function actionTestMessage()
     {
-        $bot = new BotApi(\Yii::$app->params['tg_token']);
         $result = $this->cmd->send('getUpdates');
         foreach ($result['result'] as $m) {
-            print_r($m);
-            $bot->sendMessage('#' . $m['message']['chat']['id'], "Принято, работаем");
+            print_r(
+                $this->cmd->sendMessage(
+                    $m['message']['chat']['id'],
+                    $this->view('hello', ['name' => $m['message']['chat']['first_name']])
+                )
+            );
         }
+    }
+
+    /**
+     * @param $name
+     * @param $params
+     * @return string
+     */
+    private function view($name, $params): string
+    {
+        return $this->renderFile(
+            __DIR__ . "/../views/message/$name.php",
+            $params
+        );
     }
 }

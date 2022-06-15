@@ -22,4 +22,19 @@ class SendCommand
         }
         return json_decode(file_get_contents($url), true, 512, JSON_THROW_ON_ERROR);
     }
+
+    /**
+     * @throws \JsonException
+     */
+    public function sendMessage($id, $text): array
+    {
+        return $this->send(
+            'sendMessage',
+            [
+                'chat_id' => $id,
+                'text' => $text,
+                'parse_mode' => 'html'
+            ]
+        );
+    }
 }
