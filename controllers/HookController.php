@@ -17,7 +17,7 @@ class HookController extends Controller
 
     public function actionIndex()
     {
-        $m = json_decode($this->request->getRawBody(), true, 512, JSON_THROW_ON_ERROR);
+        $m = json_decode($this->request->getRawBody(), true);
         syslog(LOG_NOTICE, print_r($m, 1));
         syslog(LOG_NOTICE, "SEND");
         try {
