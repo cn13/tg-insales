@@ -51,14 +51,9 @@ class UserShop extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @param $insert
-     * @return bool|void
-     */
-    public function beforeSave($insert)
+    public function getAccessToken()
     {
-        $this->access_token = md5($this->token . \Yii::$app->params['tg_secret']);
-        parent::beforeSave($insert);
+        return md5($this->token . \Yii::$app->params['tg_secret']);
     }
 
     /**
@@ -67,7 +62,7 @@ class UserShop extends \yii\db\ActiveRecord
     public function apiGetProfile()
     {
         $app = \Yii::$app->params['tg_login'];
-        $url = "http://{$app}:{$this->access_token}@{$this->shop}/admin/account.json";
+        $url = "http://{$app}:{$this->getAccessToken()}@{$this->shop}/admin/account.json";
         return file_get_contents($url);
     }
 }
