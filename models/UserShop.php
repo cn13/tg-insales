@@ -56,13 +56,13 @@ class UserShop extends \yii\db\ActiveRecord
         return md5($this->token . \Yii::$app->params['tg_secret']);
     }
 
-    /**
-     * @return false|string
-     */
-    public function apiGetProfile()
+    public function api($method = '/admin/orders/count.json', $params = [])
     {
         $app = \Yii::$app->params['tg_login'];
-        $url = "http://{$app}:{$this->getAccessToken()}@{$this->shop}/admin/account.json";
+        $url = "http://{$app}:{$this->getAccessToken()}@{$this->shop}/" . ltrim($method, '/');
+        if (!empty($params)) {
+            $url .= '?' . http_build_query($params);
+        }
         return file_get_contents($url);
     }
 }
