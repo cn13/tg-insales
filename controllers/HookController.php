@@ -47,12 +47,26 @@ class HookController extends Controller
     public function actionOrderCreate()
     {
         $id = \Yii::$app->request->getQueryParam('id');
-
         $m = json_decode($this->request->getRawBody(), true);
-        syslog(LOG_NOTICE, print_r($m, 1));
         try {
             $user = UserShop::findOne($id);
             $message = $this->view('order_new', ['summ' => $m['total_price']]);
+            $this->cmd->sendMessage(
+                $user->tg_chat_id,
+                $message
+            );
+        } catch (\Throwable $e) {
+            syslog(LOG_NOTICE, $e->getMessage());
+        }
+    }
+
+    public function actionOrderUpdate()
+    {
+        $id = \Yii::$app->request->getQueryParam('id');
+        $m = json_decode($this->request->getRawBody(), true);
+        try {
+            $user = UserShop::findOne($id);
+            $message = $this->view('order_update', ['summ' => $m['total_price']]);
             $this->cmd->sendMessage(
                 $user->tg_chat_id,
                 $message

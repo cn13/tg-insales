@@ -18,8 +18,6 @@ class AppController extends \yii\web\Controller
         }
         unset($params['r']);
 
-        file_put_contents(__DIR__ . '/../runtime/install.log', print_r($params ?? [], 1) . PHP_EOL, FILE_APPEND);
-
         $user = UserShop::find()->where(
             [
                 'insales_id' => $params['insales_id']
@@ -57,15 +55,47 @@ class AppController extends \yii\web\Controller
             ],
             true
         );
+
+        $user->api(
+            '/admin/webhooks.json',
+            [
+                'webhook' => [
+                    "address" => "https://cn13.ru/index.php?r=hook/order-update&id={$user->id}",
+                    "topic" => "orders/update",
+                    "format_type" => "json"
+                ]
+            ],
+            true
+        );
     }
 
     public function actionUninstall()
     {
-        file_put_contents(__DIR__ . '/../runtime/uninstall.log', print_r($_REQUEST ?? [], 1) . PHP_EOL, FILE_APPEND);
+        $params = $this->request->queryParams;
+        if (empty($params['token'])) {
+            $params = $this->request->bodyParams;
+        }
+        if (empty($params['token'])) {
+            throw new \Exception("Bad Request");
+        }
+        $user = UserShop::find()->where(['insales_id' => $params['insales_id']])->one();
+
+        if ($user) {
+            $user->delete();
+        }
     }
 
     public function actionLogin()
     {
-        file_put_contents(__DIR__ . '/../runtime/login.log', print_r($_REQUEST ?? [], 1) . PHP_EOL, FILE_APPEND);
+        /**
+         * Array
+         * (
+         * [r] => app/login
+         * [insales_id] => 1216288
+         * [shop] => myshop-bvi406.myinsales.ru
+         * [user_email] => shop@cn13.ru
+         * [user_id] => 1315317
+         * )
+         */
     }
 }
