@@ -46,7 +46,8 @@ class AppController extends \yii\web\Controller
             }
         }
 
-        file_put_contents(__DIR__ . '/../runtime/uninstall.log', $user->apiGetProfile() . PHP_EOL, FILE_APPEND);
+        echo $user->id;
+        //file_put_contents(__DIR__ . '/../runtime/uninstall.log', $user->apiGetProfile() . PHP_EOL, FILE_APPEND);
     }
 
     public function actionUninstall()
