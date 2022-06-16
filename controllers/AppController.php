@@ -9,6 +9,7 @@ class AppController extends \yii\web\Controller
     public function actionInstall()
     {
         $params = $this->request->queryParams;
+
         if (empty($params['token'])) {
             $params = $this->request->bodyParams;
         }
@@ -16,6 +17,8 @@ class AppController extends \yii\web\Controller
             throw new \Exception("Bad Request");
         }
         unset($params['r']);
+
+        file_put_contents(__DIR__ . '/../runtime/install.log', print_r($params ?? [], 1) . PHP_EOL, FILE_APPEND);
 
         $user = UserShop::find()->where(
             [
