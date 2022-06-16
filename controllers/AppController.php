@@ -28,10 +28,22 @@ class AppController extends \yii\web\Controller
 
         if (!$user) {
             $user = new UserShop($params);
-            $user->save();
+            if (!$user->save()) {
+                file_put_contents(
+                    __DIR__ . '/../runtime/install.log',
+                    print_r($user->errors ?? [], 1) . PHP_EOL,
+                    FILE_APPEND
+                );
+            }
         } elseif ($user->token !== $params['token']) {
             $user->token = $params['token'];
-            $user->save();
+            if (!$user->save()) {
+                file_put_contents(
+                    __DIR__ . '/../runtime/install.log',
+                    print_r($user->errors ?? [], 1) . PHP_EOL,
+                    FILE_APPEND
+                );
+            }
         }
 
         file_put_contents(__DIR__ . '/../runtime/uninstall.log', $user->apiGetProfile() . PHP_EOL, FILE_APPEND);
