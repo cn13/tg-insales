@@ -1,6 +1,6 @@
 <?php
 
-namespace app\commands;
+namespace app\controllers;
 
 class AppController extends \yii\web\Controller
 {
