@@ -53,13 +53,12 @@ class UserShop extends \yii\db\ActiveRecord
 
     /**
      * @param $insert
-     * @param $changedAttributes
      * @return bool|void
      */
-    public function beforeSave($insert, $changedAttributes)
+    public function beforeSave($insert)
     {
-        $this->access_token = md5($this->token . \Yii::$app->params['secret']);
-        parent::afterSave($insert, $changedAttributes);
+        $this->access_token = md5($this->token . \Yii::$app->params['tg_secret']);
+        parent::beforeSave($insert);
     }
 
     /**

@@ -20,14 +20,12 @@ class AppController extends \yii\web\Controller
         if (!$user) {
             $user = new UserShop($params);
             $user->save();
-        }
-
-        if ($user->token !== $params['token']) {
+        } elseif ($user->token !== $params['token']) {
             $user->token = $params['token'];
             $user->save();
         }
 
-        echo $user->apiGetProfile();
+        file_put_contents(__DIR__ . '/../runtime/uninstall.log', $user->apiGetProfile() . PHP_EOL, FILE_APPEND);
     }
 
     public function actionUninstall()
