@@ -6,6 +6,8 @@ namespace app\models;
  * This is the model class for table "user_shop".
  *
  * @property int $id
+ * @property int $tg_chat_id
+ * @property string $tg_username
  * @property string $shop
  * @property string $token
  * @property string $insales_id

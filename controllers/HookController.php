@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\helpers\SendCommand;
+use app\models\UserShop;
 use yii\rest\Controller;
 
 class HookController extends Controller
@@ -21,9 +22,20 @@ class HookController extends Controller
         syslog(LOG_NOTICE, print_r($m, 1));
         syslog(LOG_NOTICE, "SEND");
         try {
+            $user = UserShop::findOne(['tg_username' => $m['message']['chat']['username']]);
+            if (!empty($user)) {
+                $message = $this->view('hello', [
+                    'name' => $m['message']['chat']['first_name'],
+                    'shopUrl' => $user->shop
+                ]);
+                $user->updateAttributes(['tg_chat_id' => $m['message']['chat']['id']]);
+            } else {
+                $message = $this->view('shop_not_found');
+            }
+
             $result = $this->cmd->sendMessage(
                 $m['message']['chat']['id'],
-                $this->view('hello', ['name' => $m['message']['chat']['first_name']])
+                $message
             );
             syslog(LOG_NOTICE, print_r($result, 1));
         } catch (\Throwable $e) {
@@ -33,11 +45,11 @@ class HookController extends Controller
     }
 
     /**
-     * @param $name
-     * @param $params
+     * @param string $name
+     * @param array $params
      * @return string
      */
-    private function view($name, $params): string
+    private function view(string $name, array $params = []): string
     {
         return $this->renderFile(
             __DIR__ . "/../views/message/$name.php",

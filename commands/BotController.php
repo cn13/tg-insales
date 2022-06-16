@@ -51,10 +51,9 @@ class BotController extends \yii\console\Controller
         }
     }
 
-
     public function actionTest()
     {
-        $user = UserShop::findOne(1);
+        $user = UserShop::findOne(2);
         echo $user->api('/admin/orders/count.json');
     }
 
