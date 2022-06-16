@@ -50,7 +50,7 @@ class HookController extends Controller
         $m = json_decode($this->request->getRawBody(), true);
         try {
             $user = UserShop::findOne($id);
-            $message = $this->view('order_new', ['summ' => $m['total_price']]);
+            $message = $this->view('order_new', ['order' => $m]);
             $this->cmd->sendMessage(
                 $user->tg_chat_id,
                 $message
@@ -64,9 +64,10 @@ class HookController extends Controller
     {
         $id = \Yii::$app->request->getQueryParam('id');
         $m = json_decode($this->request->getRawBody(), true);
+        syslog(LOG_NOTICE, $this->request->getRawBody());
         try {
             $user = UserShop::findOne($id);
-            $message = $this->view('order_update', ['summ' => $m['total_price']]);
+            $message = $this->view('order_update', ['order' => $m]);
             $this->cmd->sendMessage(
                 $user->tg_chat_id,
                 $message
