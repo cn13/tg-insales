@@ -31,7 +31,7 @@ class AppController extends \yii\web\Controller
             if (!$user->save()) {
                 file_put_contents(
                     __DIR__ . '/../runtime/install.log',
-                    print_r($user->errors ?? [], 1) . PHP_EOL,
+                    print_r($user->getFirstErrors() ?? [], 1) . PHP_EOL,
                     FILE_APPEND
                 );
             }
@@ -40,7 +40,7 @@ class AppController extends \yii\web\Controller
             if (!$user->save()) {
                 file_put_contents(
                     __DIR__ . '/../runtime/install.log',
-                    print_r($user->errors ?? [], 1) . PHP_EOL,
+                    print_r($user->getFirstErrors() ?? [], 1) . PHP_EOL,
                     FILE_APPEND
                 );
             }
