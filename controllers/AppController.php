@@ -46,8 +46,17 @@ class AppController extends \yii\web\Controller
             }
         }
 
-        echo $user->id;
-        //file_put_contents(__DIR__ . '/../runtime/uninstall.log', $user->apiGetProfile() . PHP_EOL, FILE_APPEND);
+        $user->api(
+            '/admin/webhooks.json',
+            [
+                'webhook' => [
+                    "address" => "https://cn13.ru/index.php?r=hook/order-create&id={$user->id}",
+                    "topic" => "orders/create",
+                    "format_type" => "json"
+                ]
+            ],
+            true
+        );
     }
 
     public function actionUninstall()

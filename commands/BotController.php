@@ -54,7 +54,19 @@ class BotController extends \yii\console\Controller
     public function actionTest()
     {
         $user = UserShop::findOne(2);
-        echo $user->api('/admin/orders/count.json');
+        echo $user->api(
+            '/admin/webhooks.json',
+            [
+                'webhook' => [
+                    "address" => "https://cn13.ru/index.php?r=hook/order-create&id={$user->id}",
+                    "topic" => "orders/create",
+                    "format_type" => "json"
+                ]
+            ],
+            true
+        );
+
+        echo $user->api('/admin/webhooks.json');
     }
 
     /**
