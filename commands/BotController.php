@@ -3,6 +3,7 @@
 namespace app\commands;
 
 use app\helpers\SendCommand;
+use app\models\UserShop;
 
 /**
  * @property $token string
@@ -48,6 +49,13 @@ class BotController extends \yii\console\Controller
                 )
             );
         }
+    }
+
+
+    public function actionTest()
+    {
+        $user = UserShop::findOne(1);
+        echo $user->apiGetProfile();
     }
 
     /**
