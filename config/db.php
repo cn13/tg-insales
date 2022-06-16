@@ -1,14 +1,19 @@
 <?php
 
+$config = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'config.json'), true);
+
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=yii2basic',
-    'username' => 'root',
-    'password' => '',
+    'dsn' => sprintf('pgsql:host=%s;dbname=%s', $config['db']['host'], $config['db']['dbname']),
+    'username' => $config['db']['username'],
+    'password' => $config['db']['password'],
     'charset' => 'utf8',
-
-    // Schema cache options (for production environment)
-    //'enableSchemaCache' => true,
-    //'schemaCacheDuration' => 60,
-    //'schemaCache' => 'cache',
+    'schemaMap' => [
+        'pgsql' => [
+            'class' => 'yii\db\pgsql\Schema',
+            'defaultSchema' => $config['db']['schema'] ?? 'public'
+        ]
+    ],
 ];
+
+
