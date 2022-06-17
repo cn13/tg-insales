@@ -30,7 +30,7 @@ class SendCommand
      */
     private function curl($url, $data)
     {
-        $data['text'] = urlencode($data['text']);
+        //$data['text'] = urlencode($data['text']);
         $ch = curl_init();
         //  set the url
         curl_setopt($ch, CURLOPT_URL, $url);
