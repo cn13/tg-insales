@@ -30,7 +30,7 @@ class SendCommand
      */
     private function curl($url, $data)
     {
-        $data['text'] = '<pre>' . $data['text'] . '</pre>';
+        //$data['text'] = '<pre>' . $data['text'] . '</pre>';
         foreach ($data as $k => $v) {
             $data[$k] = urlencode($v);
         }
