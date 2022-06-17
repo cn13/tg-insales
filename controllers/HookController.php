@@ -67,7 +67,7 @@ class HookController extends Controller
         syslog(LOG_NOTICE, $this->request->getRawBody());
         try {
             $user = UserShop::findOne($id);
-            $message = $this->view('order_update', ['order' => $m]);
+            $message = $this->view('order_update', ['order' => $m, 'shopUrl' => $user->shop]);
             $this->cmd->sendMessage(
                 $user->tg_chat_id,
                 $message
