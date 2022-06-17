@@ -5,6 +5,8 @@
 Изменения в заказе <?= $order['number'] ?>:
 <?php
 foreach ($order['order_changes'] as $change): ?>
-    - <?= $change['full_description'] ?> - <?= date('d.m.Y H:i:s', strtotime($change['created_at'])) ?><br>
+    <?= date('d.m.Y в H:i', strtotime($change['created_at'])) ?>
+    <?= $change['full_description'] ?>
 <?php
 endforeach; ?>
+Сумма: <?= $order['total_price'] ?>
