@@ -31,10 +31,6 @@ class SendCommand
     private function curl($url, $data)
     {
         $data['text'] = '<pre>' . $data['text'] . '</pre>';
-        /*foreach ($data as $k => $v) {
-            $data[$k] = urlencode($v);
-        }*/
-
         $ch = curl_init();
         //  set the url
         curl_setopt($ch, CURLOPT_URL, $url);
