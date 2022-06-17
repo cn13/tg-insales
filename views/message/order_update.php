@@ -1,13 +1,9 @@
 <?php
+
 /** @var $order array */
-
+$change = $order['order_changes'][0];
 ?>
-Изменения в заказе <?= $order['number'] ?>:
-<?php
-foreach ($order['order_changes'] as $change): ?>
+Изменение в заказе <?= $order['number'] ?>:
     <?= date('d.m.Y H:i', strtotime($change['created_at'])) ?> <?= $change['full_description'] ?>
-
-<?php
-endforeach; ?>
 --
 Сумма: <?= $order['total_price'] ?>
