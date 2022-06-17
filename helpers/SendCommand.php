@@ -28,14 +28,20 @@ class SendCommand
      * @param $params
      * @return bool|string
      */
-    private function curl($url, $params)
+    private function curl($url, $data)
     {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        $ch = curl_init();
+        //  set the url
+        curl_setopt($ch, CURLOPT_URL, $url);
+        //  number of POST vars
+        curl_setopt($ch, CURLOPT_POST, count($data));
+        //  POST data
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        //  To display result of curl
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        //  execute post
         $result = curl_exec($ch);
+        //  close connection
         curl_close($ch);
         return $result;
     }
