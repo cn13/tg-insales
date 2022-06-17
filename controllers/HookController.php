@@ -16,8 +16,8 @@ class HookController extends Controller
 
     public function init()
     {
-        $this->message = json_decode($this->request->getRawBody(), true);
         parent::init();
+        $this->message = json_decode($this->request->getRawBody(), true);
     }
 
     public function actionIndex()
