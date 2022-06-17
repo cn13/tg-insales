@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
+use app\helpers\CmdHelper;
 use app\helpers\SendCommand;
+use app\helpers\ViewHelper;
 use app\models\UserShop;
 use yii\rest\Controller;
 
@@ -10,83 +12,60 @@ class HookController extends Controller
 {
     private SendCommand $cmd;
 
+    private array $message;
+
     public function init()
     {
-        $this->cmd = new SendCommand();
+        $this->message = json_decode($this->request->getRawBody(), true);
         parent::init();
     }
 
     public function actionIndex()
     {
-        $m = json_decode($this->request->getRawBody(), true);
-        syslog(LOG_NOTICE, print_r($m, 1));
-        syslog(LOG_NOTICE, "SEND");
-        try {
-            $user = UserShop::findOne(['tg_username' => $m['message']['chat']['username']]);
-            if (!empty($user)) {
-                $message = $this->view('hello', [
-                    'name' => $m['message']['chat']['first_name'],
-                    'shopUrl' => $user->shop
-                ]);
-                $user->updateAttributes(['tg_chat_id' => $m['message']['chat']['id']]);
-            } else {
-                $message = $this->view('shop_not_found');
-            }
-
-            $result = $this->cmd->sendMessage(
-                $m['message']['chat']['id'],
-                $message
-            );
-            syslog(LOG_NOTICE, print_r($result, 1));
-        } catch (\Throwable $e) {
-            syslog(LOG_NOTICE, $e->getMessage());
-        }
-        syslog(LOG_NOTICE, "END");
-    }
-
-    public function actionOrderCreate()
-    {
-        $id = \Yii::$app->request->getQueryParam('id');
-        $m = json_decode($this->request->getRawBody(), true);
-        try {
-            $user = UserShop::findOne($id);
-            $message = $this->view('order_new', ['order' => $m, 'shopUrl' => $user->shop]);
-            $this->cmd->sendMessage(
-                $user->tg_chat_id,
-                $message
-            );
-        } catch (\Throwable $e) {
-            syslog(LOG_NOTICE, $e->getMessage());
-        }
-    }
-
-    public function actionOrderUpdate()
-    {
-        $id = \Yii::$app->request->getQueryParam('id');
-        $m = json_decode($this->request->getRawBody(), true);
-        syslog(LOG_NOTICE, $this->request->getRawBody());
-        try {
-            $user = UserShop::findOne($id);
-            $message = $this->view('order_update', ['order' => $m, 'shopUrl' => $user->shop]);
-            $this->cmd->sendMessage(
-                $user->tg_chat_id,
-                $message
-            );
-        } catch (\Throwable $e) {
-            syslog(LOG_NOTICE, $e->getMessage());
+        if (CmdHelper::isCmd($this->message['message']['text'])) {
+            CmdHelper::execute($this->message);
+        } else {
+            CmdHelper::index($this->message);
         }
     }
 
     /**
-     * @param string $name
-     * @param array $params
-     * @return string
+     * @return void
      */
-    private function view(string $name, array $params = []): string
+    public function actionOrderCreate()
     {
-        return $this->renderFile(
-            __DIR__ . "/../views/message/$name.php",
-            $params
-        );
+        $id = \Yii::$app->request->getQueryParam('id');
+        $user = UserShop::findOne($id);
+        $message = ViewHelper::view('order_new', ['order' => $this->message, 'user' => $user]);
+        $this->sendMessage($user, $message);
+    }
+
+    /**
+     * Обновление заказа
+     * @return void
+     */
+    public function actionOrderUpdate()
+    {
+        $id = \Yii::$app->request->getQueryParam('id');
+        $user = UserShop::findOne($id);
+        $message = ViewHelper::view('order_update', ['order' => $this->message, 'user' => $user]);
+        $this->sendMessage($user, $message);
+    }
+
+    /**
+     * @param UserShop $user
+     * @param string $message
+     * @return void
+     */
+    private function sendMessage(UserShop $user, string $message)
+    {
+        try {
+            (new SendCommand())->sendMessage(
+                $user->tg_chat_id,
+                $message
+            );
+        } catch (\Throwable $e) {
+            syslog(LOG_NOTICE, $e->getMessage());
+        }
     }
 }

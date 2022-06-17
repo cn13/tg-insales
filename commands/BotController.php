@@ -3,6 +3,7 @@
 namespace app\commands;
 
 use app\helpers\SendCommand;
+use app\helpers\ViewHelper;
 use app\models\UserShop;
 
 /**
@@ -45,7 +46,7 @@ class BotController extends \yii\console\Controller
             print_r(
                 $this->cmd->sendMessage(
                     $m['message']['chat']['id'],
-                    $this->view('hello', ['name' => $m['message']['chat']['first_name']])
+                    ViewHelper::view('hello', ['name' => $m['message']['chat']['first_name']])
                 )
             );
         }
@@ -79,18 +80,5 @@ class BotController extends \yii\console\Controller
         );
 
         echo $user->api('/admin/webhooks.json');
-    }
-
-    /**
-     * @param $name
-     * @param $params
-     * @return string
-     */
-    private function view($name, $params): string
-    {
-        return $this->renderFile(
-            __DIR__ . "/../views/message/$name.php",
-            $params
-        );
     }
 }

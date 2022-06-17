@@ -1,8 +1,9 @@
 <?php
 /** @var $order array */
-/** @var $shopUrl string */
+
+/** @var $user \app\models\UserShop */
 
 ?>
 Поступил новый заказ <?= $order['number'] ?> на сумму: <?= $order['total_price'] ?>
 
-<a href="https://<?= $shopUrl ?>/admin2/orders/<?= $order['id'] ?>">Перейти к заказу</a>
+<a href="https://<?= $user->shop ?>/admin2/orders/<?= $order['id'] ?>">Перейти к заказу</a>

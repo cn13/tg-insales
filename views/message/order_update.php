@@ -2,7 +2,7 @@
 
 /** @var $order array */
 $change = $order['order_changes'][0];
-/** @var $shopUrl string */
+/** @var $user \app\models\UserShop */
 ?>
 Изменение в заказе <?= $order['number'] ?>:
     <?= date('d.m.Y H:i', strtotime($change['created_at'])) ?> <?= $change['full_description'] ?>
@@ -10,4 +10,4 @@ $change = $order['order_changes'][0];
 --
 Сумма: <?= $order['total_price'] ?>
 
-<a href="https://<?= $shopUrl ?>/admin2/orders/<?= $order['id'] ?>">Перейти к заказу</a>
+<a href="https://<?= $user->shop ?>/admin2/orders/<?= $order['id'] ?>">Перейти к заказу</a>

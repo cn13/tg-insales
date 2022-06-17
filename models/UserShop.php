@@ -12,6 +12,7 @@ namespace app\models;
  * @property string $token
  * @property string $insales_id
  * @property string $access_token
+ * @property string $email
  * @property string|null $created_at
  * @property string|null $updated_at
  */
@@ -33,7 +34,7 @@ class UserShop extends \yii\db\ActiveRecord
         return [
             [['shop', 'token', 'insales_id'], 'required'],
             [['created_at', 'updated_at', 'access_token'], 'safe'],
-            [['shop', 'token', 'insales_id'], 'string', 'max' => 255],
+            [['shop', 'token', 'insales_id', 'email'], 'string', 'max' => 255],
         ];
     }
 
@@ -50,6 +51,7 @@ class UserShop extends \yii\db\ActiveRecord
             'access_token' => 'access_token',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'email' => 'email',
         ];
     }
 

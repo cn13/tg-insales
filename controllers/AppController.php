@@ -6,6 +6,10 @@ use app\models\UserShop;
 
 class AppController extends \yii\web\Controller
 {
+    /**
+     * @return void
+     * @throws \Exception
+     */
     public function actionInstall()
     {
         $params = $this->request->queryParams;
@@ -26,22 +30,9 @@ class AppController extends \yii\web\Controller
 
         if (!$user) {
             $user = new UserShop($params);
-            if (!$user->save()) {
-                file_put_contents(
-                    __DIR__ . '/../runtime/install.log',
-                    print_r($user->getFirstErrors() ?? [], 1) . PHP_EOL,
-                    FILE_APPEND
-                );
-            }
+            $user->save();
         } elseif ($user->token !== $params['token']) {
-            $user->token = $params['token'];
-            if (!$user->save()) {
-                file_put_contents(
-                    __DIR__ . '/../runtime/install.log',
-                    print_r($user->getFirstErrors() ?? [], 1) . PHP_EOL,
-                    FILE_APPEND
-                );
-            }
+            $user->updateAttributes(['token' => $params['token']]);
         }
 
         $user->api(
@@ -69,6 +60,10 @@ class AppController extends \yii\web\Controller
         );
     }
 
+    /**
+     * @return void
+     * @throws \yii\db\StaleObjectException
+     */
     public function actionUninstall()
     {
         $params = $this->request->queryParams;
@@ -79,12 +74,15 @@ class AppController extends \yii\web\Controller
             throw new \Exception("Bad Request");
         }
         $user = UserShop::find()->where(['insales_id' => $params['insales_id']])->one();
-
         if ($user) {
             $user->delete();
         }
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     public function actionLogin()
     {
         /**
@@ -97,5 +95,13 @@ class AppController extends \yii\web\Controller
          * [user_id] => 1315317
          * )
          */
+
+        $params = $this->request->queryParams;
+        if (empty($params['user_email'])) {
+            throw new \Exception("Bad Request");
+        }
+
+        $user = UserShop::find()->where(['insales_id' => $params['insales_id']])->one();
+        $user->updateAttributes(['email' => $params['user_email']]);
     }
 }
