@@ -50,7 +50,7 @@ class HookController extends Controller
         $m = json_decode($this->request->getRawBody(), true);
         try {
             $user = UserShop::findOne($id);
-            $message = $this->view('order_new', ['order' => $m]);
+            $message = $this->view('order_new', ['order' => $m, 'shopUrl' => $user->shop]);
             $this->cmd->sendMessage(
                 $user->tg_chat_id,
                 $message
