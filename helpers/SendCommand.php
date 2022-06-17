@@ -30,6 +30,7 @@ class SendCommand
      */
     private function curl($url, $data)
     {
+        $data['text'] = htmlentities($data['text']);
         $ch = curl_init();
         //  set the url
         curl_setopt($ch, CURLOPT_URL, $url);
