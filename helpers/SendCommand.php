@@ -4,7 +4,7 @@ namespace app\helpers;
 
 class SendCommand
 {
-    public mixed $token;
+    private string $token;
 
     public function __construct()
     {

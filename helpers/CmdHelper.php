@@ -45,16 +45,19 @@ class CmdHelper
     }
 
     /**
-     * @param mixed $m
+     * @param array $m
      * @return void
      * @throws \JsonException
      */
-    public static function execute(mixed $m)
+    public static function execute(array $m): void
     {
-        $cmd = new SendCommand();
-        $cmd->sendMessage(
+        $user = UserShop::findOne(['tg_username' => $m['message']['chat']['username']]);
+        if (!$user) {
+            return;
+        }
+        (new SendCommand())->sendMessage(
             $m['message']['chat']['id'],
-            "Выполняем " . $m['message']['text']
+            SlashCommand::run($user, $m['message']['text'])
         );
     }
 }

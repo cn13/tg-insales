@@ -3,6 +3,7 @@
 namespace app\commands;
 
 use app\helpers\SendCommand;
+use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
 use app\models\UserShop;
 
@@ -54,31 +55,7 @@ class BotController extends \yii\console\Controller
 
     public function actionTest()
     {
-        $user = UserShop::findOne(2);
-        $user->api(
-            '/admin/webhooks.json',
-            [
-                'webhook' => [
-                    "address" => "https://cn13.ru/index.php?r=hook/order-create&id={$user->id}",
-                    "topic" => "orders/create",
-                    "format_type" => "json"
-                ]
-            ],
-            true
-        );
-
-        $user->api(
-            '/admin/webhooks.json',
-            [
-                'webhook' => [
-                    "address" => "https://cn13.ru/index.php?r=hook/order-update&id={$user->id}",
-                    "topic" => "orders/update",
-                    "format_type" => "json"
-                ]
-            ],
-            true
-        );
-
-        echo $user->api('/admin/webhooks.json');
+        $user = UserShop::findOne(1);
+        echo SlashCommand::run($user, '\start');
     }
 }
