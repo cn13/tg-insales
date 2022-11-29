@@ -41,9 +41,10 @@ class HookController extends Controller
                         "mainPhone" => $this->message['message']['contact']['phone'],
                     ]
                 );
+
                 $path = \Yii::$app->basePath . "/web/gen/" . $chatId;
                 (new QRCode())->render($chatId, $path . '/card.png');
-                SlashCommand::mycard($this->message);
+                SlashCommand::mycard($this->message['message']);
             } else {
                 CmdHelper::index($this->message);
             }
