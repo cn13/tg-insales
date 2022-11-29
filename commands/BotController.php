@@ -25,6 +25,11 @@ class BotController extends \yii\console\Controller
         parent::init();
     }
 
+    public function actionQr()
+    {
+        echo SlashCommand::run('discount');
+    }
+
     public function actionHookList()
     {
         print_r($this->cmd->send('getWebhookInfo'));

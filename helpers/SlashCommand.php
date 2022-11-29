@@ -41,9 +41,9 @@ class SlashCommand
     private static function discount()
     {
         $n = random_int(3, 7);
-        $image = "../web/gen/" . $n . ".png";
+        $image = \Yii::$app->basePath . "/web/gen/" . $n . ".png";
         $url = 'https://api.smokelife.ru/gen/' . $n . '.png';
-        file_put_contents($image, (new QRCode())->render($n . '%'));
+        (new QRCode())->render($n . '%', $image);
         return "($url) Ваша случайная скидка $n%";
     }
 }
