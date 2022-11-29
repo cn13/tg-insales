@@ -53,18 +53,17 @@ class SlashCommand
     /**
      * @return array
      */
-    public static function newcard()
+    private static function newcard()
     {
         $keyboard = [
-            'keyboard'          =>
+            'keyboard'          => [
                 [
                     [
-                        [
-                            "text"            => "contact",
-                            "request_contact" => true
-                        ]
+                        "text"            => "contact",
+                        "request_contact" => true
                     ]
-                ],
+                ]
+            ],
             "one_time_keyboard" => true,
             "resize_keyboard"   => true
         ];
