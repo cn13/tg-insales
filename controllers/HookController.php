@@ -45,16 +45,10 @@ class HookController extends Controller
                 }
 
                 $card = Card::find()->where("chat_id = ''")->one();
-                $card->updateAttributes(
-                    [
-                        'phone'   => (string)$this->message['message']['contact']['phone_number'],
-                        'chat_id' => (string)$chatId
-                    ]
-                );
 
                 (new AqsiApi())->createClient(
                     [
-                        "id"        => (string)"tg_" . $chatId,
+                        "id"        => (string)"sl_" . $chatId,
                         "gender"    => 1,
                         "comment"   => (string)$card->number,
                         "fio"       => (string)$this->message['message']['contact']['first_name'],
@@ -62,6 +56,13 @@ class HookController extends Controller
                             "id" => (string)"0aa6dac6-73ce-4753-98fd-65ba4f9a3764"
                         ],
                         "mainPhone" => (string)$this->message['message']['contact']['phone_number'],
+                    ]
+                );
+
+                $card->updateAttributes(
+                    [
+                        'phone'   => (string)$this->message['message']['contact']['phone_number'],
+                        'chat_id' => (string)$chatId
                     ]
                 );
 
