@@ -109,7 +109,7 @@ class SendCommand
     {
         $params = [
             'chat_id'      => $id,
-            'text'         => 'Надо нажать',
+            'text'         => 'Надо нажать кнопку внизу',
             'reply_markup' => $message['reply_markup']
         ];
 

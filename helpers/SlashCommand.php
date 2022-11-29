@@ -59,8 +59,9 @@ class SlashCommand
             'keyboard'          => [
                 [
                     [
-                        "text"            => "contact",
-                        "request_contact" => true
+                        "text"            => "Отправить номер телефона",
+                        "request_contact" => true,
+                        "callback_data"   => "test_callback_data"
                     ]
                 ]
             ],
