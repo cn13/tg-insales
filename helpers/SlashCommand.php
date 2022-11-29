@@ -11,7 +11,7 @@ class SlashCommand
      * @param string $cmd
      * @return string
      */
-    public static function run(string $cmd): string
+    public static function run(string $cmd)
     {
         $cmd = preg_replace('#[^a-zA-Z0-9]#', '', $cmd);
         if (method_exists(self::class, $cmd)) {

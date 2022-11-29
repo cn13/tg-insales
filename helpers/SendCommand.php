@@ -62,7 +62,7 @@ class SendCommand
             unset($params['text']);
             $params = array_merge($params, $text);
         }
-        
+
         return $this->send(
             'sendMessage',
             $params
