@@ -48,9 +48,24 @@ class SendCommand
     }
 
     /**
+     * @param $id
+     * @param $message
+     * @return void
      * @throws \JsonException
      */
-    public function sendMessage($id, $text): array
+    public function sendMessage($id, $message)
+    {
+        if (is_string($message)) {
+            $this->sendText($id, $message);
+        } else {
+            $this->sendPhoto($id, $message);
+        }
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    public function sendText($id, $text): array
     {
         $params = [
             'chat_id'    => $id,
@@ -58,13 +73,26 @@ class SendCommand
             'parse_mode' => 'html'
         ];
 
-        if (is_array($text)) {
-            unset($params['text']);
-            $params = array_merge($params, $text);
-        }
-
         return $this->send(
             'sendMessage',
+            $params
+        );
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    public function sendPhoto($id, $photo): array
+    {
+        $params = [
+            'chat_id'    => $id,
+            'photo'      => $photo['url'],
+            'caption'    => $photo['caption'],
+            'parse_mode' => 'html'
+        ];
+
+        return $this->send(
+            'sendPhoto',
             $params
         );
     }
