@@ -6,9 +6,11 @@ use app\helpers\CmdHelper;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
+use app\models\Card;
 use app\models\UserShop;
 use app\service\AqsiApi;
 use chillerlan\QRCode\QRCode;
+use yii\db\Expression;
 use yii\rest\Controller;
 
 class HookController extends Controller
@@ -36,14 +38,29 @@ class HookController extends Controller
         } else {
             if (isset($this->message['message']['contact'])) {
                 $chatId = $this->message['message']['chat']['id'];
+                $card = Card::findOne(['chat_id' => $chatId]);
+                if ($card) {
+                    (new SendCommand())->sendMessage(
+                        $chatId,
+                        SlashCommand::mycard($this->message['message'])
+                    );
+                    return;
+                }
+
+                $card = Card::findOne(['chat_id' => new Expression('NULL')]);
+                $card->setAttribute('chat_id', $chatId);
+                $card->setAttribute('phone', $this->message['message']['contact']['phone_number']);
+                $card->save();
                 (new AqsiApi())->createClient(
                     [
-                        "id"        => $chatId,
+                        "id"        => "tg_" . $chatId,
+                        "gender"    => 1,
+                        "comment"   => $card->number,
                         "fio"       => $this->message['message']['contact']['first_name'],
                         "group"     => [
-                            "id" => "99f92a69-8fb8-4c69-947b-325528305ef6"
+                            "id" => "0aa6dac6-73ce-4753-98fd-65ba4f9a3764"
                         ],
-                        "mainPhone" => $this->message['message']['contact']['phone'],
+                        "mainPhone" => $this->message['message']['contact']['phone_number'],
                     ]
                 );
 
