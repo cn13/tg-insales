@@ -47,7 +47,7 @@ class HookController extends Controller
                     return;
                 }
 
-                $card = Card::find()->where('chat_id IS NULL')->one();
+                $card = Card::find()->where("chat_id = ''")->one();
 
                 $card->updateAttributes(
                     [
