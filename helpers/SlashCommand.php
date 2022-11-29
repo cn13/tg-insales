@@ -3,6 +3,7 @@
 namespace app\helpers;
 
 use app\models\UserShop;
+use chillerlan\QRCode\QRCode;
 
 class SlashCommand
 {
@@ -31,5 +32,18 @@ class SlashCommand
     private static function info(): string
     {
         return 'Выполнили ' . __METHOD__;
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    private static function discount()
+    {
+        $n = random_int(3, 7);
+        $image = "../web/gen/" . $n . ".png";
+        $url = 'https://api.smokelife.ru/gen/' . $n . '.png';
+        file_put_contents($image, (new QRCode())->render($n . '%'));
+        return "($url) Ваша случайная скидка $n%";
     }
 }
