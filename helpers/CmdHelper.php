@@ -10,7 +10,7 @@ class CmdHelper
      * @param string $message
      * @return bool
      */
-    public static function isCmd(string $message): bool
+    public static function isCmd($message): bool
     {
         $message = trim($message);
         return $message[0] === '/';
