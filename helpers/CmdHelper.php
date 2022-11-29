@@ -44,13 +44,9 @@ class CmdHelper
     public static function execute(array $m): void
     {
         $cmd = preg_replace('#[^a-zA-Z0-9]#', '', $m['message']['text']);
-        if (in_array($cmd, self::$internalMethod, true)) {
-            SlashCommand::$cmd($m);
-        } else {
-            (new SendCommand())->sendMessage(
-                $m['message']['chat']['id'],
-                SlashCommand::run($cmd)
-            );
-        }
+        (new SendCommand())->sendMessage(
+            $m['message']['chat']['id'],
+            SlashCommand::run($cmd)
+        );
     }
 }

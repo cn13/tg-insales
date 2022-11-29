@@ -51,22 +51,23 @@ class SlashCommand
     }
 
     /**
-     * @return bool
-     * @throws \TelegramBot\Api\Exception
-     * @throws \TelegramBot\Api\InvalidArgumentException
+     * @return array
      */
-    public static function newcard($message)
+    public static function newcard()
     {
-        $bot = new BotApi(\Yii::$app->params['tg_token']);
-        $keyboard = new Contact(); // true for one-time keyboard
-        $bot->sendMessage(
-            $message['message']['chat']['id'],
-            'Необходим доступ к вашему номеру.',
-            null,
-            false,
-            null,
-            $keyboard
-        );
-        return true;
+        $keyboard = [
+            'keyboard'          =>
+                [
+                    [
+                        [
+                            "text"            => "contact",
+                            "request_contact" => true
+                        ]
+                    ]
+                ],
+            "one_time_keyboard" => true,
+            "resize_keyboard"   => true
+        ];
+        return ['reply_markup' => json_encode($keyboard)];
     }
 }

@@ -57,6 +57,8 @@ class SendCommand
     {
         if (is_string($message)) {
             $this->sendText($id, $message);
+        } elseif (isset($message['reply_markup'])) {
+            $this->sendKeyBoard($id, $message);
         } else {
             $this->sendPhoto($id, $message);
         }
@@ -93,6 +95,25 @@ class SendCommand
 
         return $this->send(
             'sendPhoto',
+            $params
+        );
+    }
+
+    /**
+     * @param $id
+     * @param $message
+     * @return array
+     * @throws \JsonException
+     */
+    private function sendKeyBoard($id, $message)
+    {
+        $params = [
+            'chat_id'      => $id,
+            'reply_markup' => $message['reply_markup']
+        ];
+
+        return $this->send(
+            'sendMessage',
             $params
         );
     }
