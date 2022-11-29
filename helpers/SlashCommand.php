@@ -27,7 +27,7 @@ class SlashCommand
      */
     private static function start($message): string
     {
-        return 'Выполнили ' . __METHOD__;
+        return 'Привет! Нажми на меню внизу, и получи свою карту лояльности!';
     }
 
     private static function info($message): string
