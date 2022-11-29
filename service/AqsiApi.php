@@ -64,7 +64,7 @@ class AqsiApi
      * @param $url
      * @param $params
      * @param $method
-     * @return mixed|void
+     * @return mixed
      * @throws Exception
      * @throws \yii\base\InvalidConfigException
      */
@@ -79,7 +79,7 @@ class AqsiApi
         if ($response->isOk) {
             return $response->data;
         }
-        print_r($response);
+        throw new Exception(print_r($response, true));
     }
 
     /**

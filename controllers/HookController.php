@@ -47,7 +47,11 @@ class HookController extends Controller
                     throw new \RuntimeException(sprintf('Directory "%s" was not created', $path));
                 }
                 (new QRCode())->render($chatId, $path . '/card.png');
-                SlashCommand::mycard($this->message['message']);
+
+                (new SendCommand())->sendMessage(
+                    $chatId,
+                    SlashCommand::mycard($this->message['message'])
+                );
             }
         }
     }
