@@ -51,9 +51,8 @@ class HookController extends Controller
 
                 $card->updateAttributes(
                     [
-                        'phone'      => $this->message['message']['contact']['phone_number'],
-                        'chat_id'    => $chatId,
-                        'updated_at' => new Expression('NOW()')
+                        'phone'   => $this->message['message']['contact']['phone_number'],
+                        'chat_id' => $chatId
                     ]
                 )
 
