@@ -86,7 +86,7 @@ class SendCommand
     {
         $params = [
             'chat_id'    => $id,
-            'photo'      => $photo['url'],
+            'photo'      => $photo['photo'],
             'caption'    => $photo['caption'],
             'parse_mode' => 'html'
         ];

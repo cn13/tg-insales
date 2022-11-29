@@ -44,8 +44,8 @@ class SlashCommand
         $image = \Yii::$app->basePath . "/web/gen/" . $n . ".png";
         (new QRCode())->render($n . '%', $image);
         return [
-            "photo" => 'https://api.smokelife.ru/gen/' . $n . '.png',
-            'text'  => 'Скидка готова, покажите QR код на кассе!'
+            "photo"   => 'https://api.smokelife.ru/gen/' . $n . '.png',
+            "caption" => 'Скидка готова, покажите QR код на кассе!'
         ];
     }
 }
