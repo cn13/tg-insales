@@ -20,7 +20,8 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
         "yiisoft/yii2-httpclient": "^2.0",
         "ext-json": "*",
-        "chillerlan/php-qrcode": "^4.3"
+        "chillerlan/php-qrcode": "^4.3",
+        "ext-curl": "*"
     },
     "config": {
         "process-timeout": 1800,
