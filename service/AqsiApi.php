@@ -72,7 +72,9 @@ class AqsiApi
     {
         $response = $this->createRequest()
             ->setUrl($this->getUrl($url))
-            ->addData($params)
+            ->setFormat(Client::FORMAT_JSON)
+            ->addHeaders(['content-type' => 'application/json'])
+            ->setContent(json_encode($params))
             ->setMethod($method)
             ->send();
 
