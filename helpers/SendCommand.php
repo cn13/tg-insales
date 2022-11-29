@@ -52,13 +52,20 @@ class SendCommand
      */
     public function sendMessage($id, $text): array
     {
+        $params = [
+            'chat_id'    => $id,
+            'text'       => $text,
+            'parse_mode' => 'html'
+        ];
+
+        if (is_array($text)) {
+            unset($params['text']);
+            $params = array_merge($params, $text);
+        }
+        
         return $this->send(
             'sendMessage',
-            [
-                'chat_id' => $id,
-                'text' => $text,
-                'parse_mode' => 'html'
-            ]
+            $params
         );
     }
 }

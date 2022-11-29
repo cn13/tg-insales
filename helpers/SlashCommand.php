@@ -35,15 +35,17 @@ class SlashCommand
     }
 
     /**
-     * @return string
+     * @return string[]
      * @throws \Exception
      */
     private static function discount()
     {
         $n = random_int(3, 7);
         $image = \Yii::$app->basePath . "/web/gen/" . $n . ".png";
-        $url = 'https://api.smokelife.ru/gen/' . $n . '.png';
         (new QRCode())->render($n . '%', $image);
-        return "($url) Ваша случайная скидка $n%";
+        return [
+            "photo" => 'https://api.smokelife.ru/gen/' . $n . '.png',
+            'text'  => 'Скидка готова, покажите QR код на кассе!'
+        ];
     }
 }
