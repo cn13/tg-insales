@@ -22,6 +22,10 @@ class HookController extends Controller
         $this->message = json_decode($this->request->getRawBody(), true);
     }
 
+    /**
+     * @throws \JsonException
+     * @throws \Exception
+     */
     public function actionIndex()
     {
         file_put_contents(
@@ -48,7 +52,7 @@ class HookController extends Controller
 
                 (new AqsiApi())->createClient(
                     [
-                        "id"        => (string)"sl_" . $chatId,
+                        "id"        => md5($chatId . random_int(0, 9999) . time()),
                         "gender"    => 1,
                         "comment"   => (string)$card->number,
                         "fio"       => (string)$this->message['message']['contact']['first_name'],
