@@ -43,6 +43,9 @@ class HookController extends Controller
                 );
 
                 $path = \Yii::$app->basePath . "/web/gen/" . $chatId;
+                if (!file_exists($path) && !mkdir($path) && !is_dir($path)) {
+                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $path));
+                }
                 (new QRCode())->render($chatId, $path . '/card.png');
                 SlashCommand::mycard($this->message['message']);
             } else {
