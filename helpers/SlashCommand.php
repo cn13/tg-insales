@@ -12,11 +12,11 @@ class SlashCommand
      * @param string $cmd
      * @return string
      */
-    public static function run(string $cmd)
+    public static function run(string $cmd, array $m)
     {
         $cmd = preg_replace('#[^a-zA-Z0-9]#', '', $cmd);
         if (method_exists(self::class, $cmd)) {
-            return self::$cmd();
+            return self::$cmd($m);
         }
         return 'Не понял команду!';
     }
@@ -25,43 +25,45 @@ class SlashCommand
      * @return string
      * @see
      */
-    private static function start(): string
+    private static function start($message): string
     {
         return 'Выполнили ' . __METHOD__;
     }
 
-    private static function info(): string
+    private static function info($message): string
     {
         return 'Выполнили ' . __METHOD__;
     }
 
     /**
-     * @return string[]
-     * @throws \Exception
+     * @param $message
+     * @return string|string[]
      */
-    private static function discount()
+    public static function mycard($message)
     {
-        $n = random_int(3, 7);
-        $image = \Yii::$app->basePath . "/web/gen/" . $n . ".png";
-        (new QRCode())->render($n . '%', $image);
+        $chatId = $message['chat']['id'];
+        $path = \Yii::$app->basePath . "/web/gen/" . $chatId;
+        if (!file_exists($path)) {
+            return "Вам необходимо выпустить карту";
+        }
+
         return [
-            "photo"   => 'https://api.smokelife.ru/gen/' . $n . '.png',
-            "caption" => 'Скидка готова, покажите QR код на кассе!'
+            "photo"   => 'https://api.smokelife.ru/gen/' . $chatId . '/card.png',
+            "caption" => 'Ваша скидочная карта!'
         ];
     }
 
     /**
      * @return array
      */
-    private static function newcard()
+    private static function newcard($message)
     {
         $keyboard = [
             'keyboard'          => [
                 [
                     [
                         "text"            => "Отправить номер телефона",
-                        "request_contact" => true,
-                        "callback_data"   => "test_callback_data"
+                        "request_contact" => true
                     ]
                 ]
             ],

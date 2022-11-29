@@ -14,7 +14,8 @@ class AqsiApi
 
     private $url = [
         'goods'         => '/Goods/list',
-        'goodsCategory' => '/GoodsCategory/list'
+        'goodsCategory' => '/GoodsCategory/list',
+        'createClient'  => '/Clients',
     ];
 
     public function __construct()
@@ -30,6 +31,11 @@ class AqsiApi
     public function getGoods()
     {
         return $this->get('goods');
+    }
+
+    public function createClient($params)
+    {
+        $this->post('createClient', $params);
     }
 
     /**
