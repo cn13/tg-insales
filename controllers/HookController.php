@@ -5,12 +5,9 @@ namespace app\controllers;
 use app\helpers\CmdHelper;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
-use app\helpers\ViewHelper;
 use app\models\Card;
-use app\models\UserShop;
 use app\service\AqsiApi;
 use chillerlan\QRCode\QRCode;
-use yii\db\Expression;
 use yii\rest\Controller;
 
 class HookController extends Controller
@@ -38,10 +35,10 @@ class HookController extends Controller
         } else {
             if (isset($this->message['message']['contact'])) {
                 $chatId = $this->message['message']['chat']['id'];
-                $card = Card::findOne(['chat_id' => $chatId]);
+                $card = Card::find()->where(['chat_id' => $chatId])->one();
                 if ($card) {
                     (new SendCommand())->sendMessage(
-                        $chatId,
+                        $card->chat_id,
                         SlashCommand::mycard($this->message['message'])
                     );
                     return;
