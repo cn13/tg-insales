@@ -48,7 +48,7 @@ class SlashCommand
         }
         return [
             "photo"   => 'https://api.smokelife.ru/gen/' . $chatId . '/card.png',
-            "caption" => 'Ваша скидочная карта!'
+            "caption" => 'Ваша карта лояльности!'
         ];
     }
 
