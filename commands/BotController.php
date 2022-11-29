@@ -6,6 +6,7 @@ use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
 use app\models\UserShop;
+use app\service\AqsiApi;
 
 /**
  * @property $token string
@@ -27,7 +28,16 @@ class BotController extends \yii\console\Controller
 
     public function actionQr()
     {
-        echo SlashCommand::run('discount');
+        (new AqsiApi())->createClient(
+            [
+                "id"        => 1,
+                "fio"       => 1,
+                "group"     => [
+                    "id" => "99f92a69-8fb8-4c69-947b-325528305ef6"
+                ],
+                "mainPhone" => 1,
+            ]
+        );
     }
 
     public function actionHookList()
