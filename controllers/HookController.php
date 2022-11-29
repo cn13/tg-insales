@@ -50,23 +50,29 @@ class HookController extends Controller
 
                 $card = Card::find()->where("chat_id = ''")->one();
 
+                $user_id = md5($chatId . random_int(0, 9999) . time());
                 (new AqsiApi())->createClient(
                     [
-                        "id"        => md5($chatId . random_int(0, 9999) . time()),
-                        "gender"    => 1,
-                        "comment"   => (string)$card->number,
-                        "fio"       => (string)$this->message['message']['contact']['first_name'],
-                        "group"     => [
+                        "id"          => $user_id,
+                        "gender"      => 1,
+                        "comment"     => (string)$card->number,
+                        "loyaltyCard" => [
+                            "prefix" => substr($card->number, 0, 2),
+                            "number" => substr($card->number, 2, 4),
+                        ],
+                        "fio"         => (string)$this->message['message']['contact']['first_name'],
+                        "group"       => [
                             "id" => (string)"0aa6dac6-73ce-4753-98fd-65ba4f9a3764"
                         ],
-                        "mainPhone" => (string)$this->message['message']['contact']['phone_number'],
+                        "mainPhone"   => (string)$this->message['message']['contact']['phone_number'],
                     ]
                 );
 
                 $card->updateAttributes(
                     [
                         'phone'   => (string)$this->message['message']['contact']['phone_number'],
-                        'chat_id' => (string)$chatId
+                        'chat_id' => (string)$chatId,
+                        'user_id' => $user_id
                     ]
                 );
 
