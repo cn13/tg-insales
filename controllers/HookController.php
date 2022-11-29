@@ -7,7 +7,7 @@ use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\models\Card;
 use app\service\AqsiApi;
-use chillerlan\QRCode\QRCode;
+use yii\db\Transaction;
 use yii\rest\Controller;
 
 class HookController extends Controller
@@ -25,6 +25,7 @@ class HookController extends Controller
     /**
      * @throws \JsonException
      * @throws \Exception
+     * @throws \Throwable
      */
     public function actionIndex()
     {
@@ -38,55 +39,57 @@ class HookController extends Controller
             CmdHelper::execute($this->message['message']);
         } else {
             if (isset($this->message['message']['contact'])) {
-                $chatId = $this->message['message']['chat']['id'];
-                $card = Card::find()->where(['chat_id' => $chatId])->one();
-                if ($card) {
+                /** @var Transaction $tr */
+                $tr = Card::getDb()->beginTransaction();
+                try {
+                    $chatId = $this->message['message']['chat']['id'];
+                    $card = Card::find()->where(['chat_id' => $chatId])->one();
+                    if ($card) {
+                        (new SendCommand())->sendMessage(
+                            $card->chat_id,
+                            SlashCommand::mycard($this->message['message'])
+                        );
+                        return;
+                    }
+
+                    $card = Card::find()->where("chat_id = ''")->one();
+
+                    $user_id = md5($chatId . random_int(0, 9999) . time());
+                    (new AqsiApi())->createClient(
+                        [
+                            "id"          => $user_id,
+                            "gender"      => 1,
+                            "comment"     => (string)$card->number,
+                            "loyaltyCard" => [
+                                "prefix" => substr($card->number, 0, 2),
+                                "number" => substr($card->number, 2, 4),
+                            ],
+                            "fio"         => (string)$this->message['message']['contact']['first_name'],
+                            "group"       => [
+                                "id" => (string)"0aa6dac6-73ce-4753-98fd-65ba4f9a3764"
+                            ],
+                            "mainPhone"   => (string)$this->message['message']['contact']['phone_number'],
+                        ]
+                    );
+
+                    $card->updateAttributes(
+                        [
+                            'phone'   => (string)$this->message['message']['contact']['phone_number'],
+                            'chat_id' => (string)$chatId,
+                            'user_id' => $user_id
+                        ]
+                    );
+                    $card->genQr();
+
                     (new SendCommand())->sendMessage(
-                        $card->chat_id,
+                        $chatId,
                         SlashCommand::mycard($this->message['message'])
                     );
-                    return;
+                    $tr->commit();
+                } catch (\Throwable $e) {
+                    $tr->rollBack();
+                    throw $e;
                 }
-
-                $card = Card::find()->where("chat_id = ''")->one();
-
-                $user_id = md5($chatId . random_int(0, 9999) . time());
-                (new AqsiApi())->createClient(
-                    [
-                        "id"          => $user_id,
-                        "gender"      => 1,
-                        "comment"     => (string)$card->number,
-                        "loyaltyCard" => [
-                            "prefix" => substr($card->number, 0, 2),
-                            "number" => substr($card->number, 2, 4),
-                        ],
-                        "fio"         => (string)$this->message['message']['contact']['first_name'],
-                        "group"       => [
-                            "id" => (string)"0aa6dac6-73ce-4753-98fd-65ba4f9a3764"
-                        ],
-                        "mainPhone"   => (string)$this->message['message']['contact']['phone_number'],
-                    ]
-                );
-
-                $card->updateAttributes(
-                    [
-                        'phone'   => (string)$this->message['message']['contact']['phone_number'],
-                        'chat_id' => (string)$chatId,
-                        'user_id' => $user_id
-                    ]
-                );
-
-                $path = \Yii::$app->basePath . "/web/gen/" . $chatId;
-                if (!file_exists($path) && !mkdir($path) && !is_dir($path)) {
-                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $path));
-                }
-
-                (new QRCode())->render($card->number, $path . '/card.png');
-
-                (new SendCommand())->sendMessage(
-                    $chatId,
-                    SlashCommand::mycard($this->message['message'])
-                );
             }
         }
     }

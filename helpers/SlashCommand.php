@@ -2,6 +2,7 @@
 
 namespace app\helpers;
 
+use app\models\Card;
 use chillerlan\QRCode\QRCode;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Contact;
@@ -42,12 +43,12 @@ class SlashCommand
     public static function mycard($message)
     {
         $chatId = $message['chat']['id'] ?? '0000';
-        $path = \Yii::$app->basePath . "/web/gen/" . $chatId;
-        if (!file_exists($path)) {
+        $card = Card::find()->where(['chat_id' => $chatId])->one();
+        if (!$card) {
             return "Вам необходимо выпустить карту";
         }
         return [
-            "photo"   => 'https://api.smokelife.ru/gen/' . $chatId . '/card.png',
+            "photo"   => $card->getQrLink(),
             "caption" => 'Ваша карта лояльности!'
         ];
     }
