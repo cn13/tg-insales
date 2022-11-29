@@ -52,7 +52,7 @@ class HookController extends Controller
                         return;
                     }
 
-                    $card = Card::find()->where("chat_id = ''")->one();
+                    $card = Card::find()->where("chat_id is null")->one();
 
                     $user_id = md5($chatId . random_int(0, 9999) . time());
                     (new AqsiApi())->createClient(
