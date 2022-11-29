@@ -28,44 +28,4 @@ class HookController extends Controller
             CmdHelper::index($this->message);
         }
     }
-
-    /**
-     * @return void
-     */
-    public function actionOrderCreate()
-    {
-        $id = \Yii::$app->request->getQueryParam('id');
-        $user = UserShop::findOne($id);
-        $message = ViewHelper::view('order_new', ['order' => $this->message, 'user' => $user]);
-        $this->sendMessage($user, $message);
-    }
-
-    /**
-     * Обновление заказа
-     * @return void
-     */
-    public function actionOrderUpdate()
-    {
-        $id = \Yii::$app->request->getQueryParam('id');
-        $user = UserShop::findOne($id);
-        $message = ViewHelper::view('order_update', ['order' => $this->message, 'user' => $user]);
-        $this->sendMessage($user, $message);
-    }
-
-    /**
-     * @param UserShop $user
-     * @param string $message
-     * @return void
-     */
-    private function sendMessage(UserShop $user, string $message)
-    {
-        try {
-            (new SendCommand())->sendMessage(
-                $user->tg_chat_id,
-                $message
-            );
-        } catch (\Throwable $e) {
-            syslog(LOG_NOTICE, $e->getMessage());
-        }
-    }
 }

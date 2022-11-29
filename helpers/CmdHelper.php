@@ -17,10 +17,10 @@ class CmdHelper
     }
 
     /**
-     * @param mixed $m
+     * @param $m
      * @return void
      */
-    public static function index(mixed $m)
+    public static function index($m)
     {
         try {
             $cmd = new SendCommand();
@@ -51,13 +51,9 @@ class CmdHelper
      */
     public static function execute(array $m): void
     {
-        $user = UserShop::findOne(['tg_username' => $m['message']['chat']['username']]);
-        if (!$user) {
-            return;
-        }
         (new SendCommand())->sendMessage(
             $m['message']['chat']['id'],
-            SlashCommand::run($user, $m['message']['text'])
+            SlashCommand::run($m['message']['text'])
         );
     }
 }
