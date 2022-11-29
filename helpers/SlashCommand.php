@@ -27,7 +27,7 @@ class SlashCommand
      */
     private static function start($message): string
     {
-        return 'Привет! Нажми на меню внизу, и получи свою карту лояльности!';
+        return 'Привет! Нажми на меню внизу, и получи свою карту лояльности! Скидка 5 процентов, будет увеличиваться, от количества заказов. Условия мы озвучим позже :)';
     }
 
     private static function info($message): string
