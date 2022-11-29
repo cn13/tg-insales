@@ -45,28 +45,25 @@ class HookController extends Controller
                 }
 
                 $card = Card::find()->where("chat_id = ''")->one();
-
                 $card->updateAttributes(
                     [
-                        'phone'   => $this->message['message']['contact']['phone_number'],
-                        'chat_id' => $chatId
+                        'phone'   => (string)$this->message['message']['contact']['phone_number'],
+                        'chat_id' => (string)$chatId
                     ]
-                )
+                );
 
-                (
-                    new AqsiApi()
-                )->createClient(
-                        [
-                            "id"        => "tg_" . $chatId,
-                            "gender"    => 1,
-                            "comment"   => $card->number,
-                            "fio"       => $this->message['message']['contact']['first_name'],
-                            "group"     => [
-                                "id" => "0aa6dac6-73ce-4753-98fd-65ba4f9a3764"
-                            ],
-                            "mainPhone" => $this->message['message']['contact']['phone_number'],
-                        ]
-                    );
+                (new AqsiApi())->createClient(
+                    [
+                        "id"        => (string)"tg_" . $chatId,
+                        "gender"    => 1,
+                        "comment"   => (string)$card->number,
+                        "fio"       => (string)$this->message['message']['contact']['first_name'],
+                        "group"     => [
+                            "id" => (string)"0aa6dac6-73ce-4753-98fd-65ba4f9a3764"
+                        ],
+                        "mainPhone" => (string)$this->message['message']['contact']['phone_number'],
+                    ]
+                );
 
                 $path = \Yii::$app->basePath . "/web/gen/" . $chatId;
                 if (!file_exists($path) && !mkdir($path) && !is_dir($path)) {
