@@ -6,6 +6,8 @@ use app\models\UserShop;
 
 class CmdHelper
 {
+    private static $internalMethod = ['newcard'];
+
     /**
      * @param string $message
      * @return bool
@@ -41,9 +43,14 @@ class CmdHelper
      */
     public static function execute(array $m): void
     {
-        (new SendCommand())->sendMessage(
-            $m['message']['chat']['id'],
-            SlashCommand::run($m['message']['text'])
-        );
+        $cmd = preg_replace('#[^a-zA-Z0-9]#', '', $m['message']['text']);
+        if (in_array($cmd, self::$internalMethod, true)) {
+            SlashCommand::$cmd($m);
+        } else {
+            (new SendCommand())->sendMessage(
+                $m['message']['chat']['id'],
+                SlashCommand::run($cmd)
+            );
+        }
     }
 }

@@ -2,8 +2,9 @@
 
 namespace app\helpers;
 
-use app\models\UserShop;
 use chillerlan\QRCode\QRCode;
+use TelegramBot\Api\BotApi;
+use TelegramBot\Api\Types\Contact;
 
 class SlashCommand
 {
@@ -47,5 +48,25 @@ class SlashCommand
             "photo"   => 'https://api.smokelife.ru/gen/' . $n . '.png',
             "caption" => 'Скидка готова, покажите QR код на кассе!'
         ];
+    }
+
+    /**
+     * @return bool
+     * @throws \TelegramBot\Api\Exception
+     * @throws \TelegramBot\Api\InvalidArgumentException
+     */
+    public static function newcard($message)
+    {
+        $bot = new BotApi(\Yii::$app->params['tg_token']);
+        $keyboard = new Contact(); // true for one-time keyboard
+        $bot->sendMessage(
+            $message['message']['chat']['id'],
+            'Необходим доступ к вашему номеру.',
+            null,
+            false,
+            null,
+            $keyboard
+        );
+        return true;
     }
 }

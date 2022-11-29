@@ -21,7 +21,8 @@
         "yiisoft/yii2-httpclient": "^2.0",
         "ext-json": "*",
         "chillerlan/php-qrcode": "^4.3",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "telegram-bot/api": "^2.3"
     },
     "config": {
         "process-timeout": 1800,
