@@ -24,17 +24,7 @@ class CmdHelper
     {
         try {
             $cmd = new SendCommand();
-            $user = UserShop::findOne(['tg_username' => $m['message']['chat']['username']]);
-            if (!empty($user)) {
-                $message = ViewHelper::view('hello', [
-                    'name' => $m['message']['chat']['first_name'],
-                    'shopUrl' => $user->shop
-                ]);
-                $user->updateAttributes(['tg_chat_id' => $m['message']['chat']['id']]);
-            } else {
-                $message = ViewHelper::view('shop_not_found');
-            }
-
+            $message = ViewHelper::view('shop_not_found');
             $cmd->sendMessage(
                 $m['message']['chat']['id'],
                 $message
