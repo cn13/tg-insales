@@ -30,20 +30,19 @@ class HookController extends Controller
             CmdHelper::execute($this->message);
         } else {
             if (isset($this->message['message']['contact'])) {
+                $chatId = $this->message['message']['chat']['id'];
                 (new AqsiApi())->createClient(
                     [
-                        "id"        => $this->message['chat']['id'],
-                        "fio"       => $this->message['contact']['first_name'],
+                        "id"        => $chatId,
+                        "fio"       => $this->message['message']['contact']['first_name'],
                         "group"     => [
                             "id" => "99f92a69-8fb8-4c69-947b-325528305ef6"
                         ],
-                        "mainPhone" => $this->message['contact']['phone'],
+                        "mainPhone" => $this->message['message']['contact']['phone'],
                     ]
                 );
-                $chatId = $this->message['chat']['id'];
                 $path = \Yii::$app->basePath . "/web/gen/" . $chatId;
                 (new QRCode())->render($chatId, $path . '/card.png');
-
                 SlashCommand::mycard($this->message);
             } else {
                 CmdHelper::index($this->message);
