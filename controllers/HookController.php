@@ -27,7 +27,7 @@ class HookController extends Controller
     {
         //file_put_contents('../runtime/messages.json', json_encode($this->message), FILE_APPEND);
         if (CmdHelper::isCmd($this->message['message']['text'])) {
-            CmdHelper::execute($this->message);
+            CmdHelper::execute($this->message['message']);
         } else {
             if (isset($this->message['message']['contact'])) {
                 $chatId = $this->message['message']['chat']['id'];
@@ -48,8 +48,6 @@ class HookController extends Controller
                 }
                 (new QRCode())->render($chatId, $path . '/card.png');
                 SlashCommand::mycard($this->message['message']);
-            } else {
-                CmdHelper::index($this->message);
             }
         }
     }

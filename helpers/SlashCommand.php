@@ -41,12 +41,11 @@ class SlashCommand
      */
     public static function mycard($message)
     {
-        $chatId = $message['chat']['id'];
+        $chatId = $message['chat']['id'] ?? '0000';
         $path = \Yii::$app->basePath . "/web/gen/" . $chatId;
         if (!file_exists($path)) {
             return "Вам необходимо выпустить карту";
         }
-
         return [
             "photo"   => 'https://api.smokelife.ru/gen/' . $chatId . '/card.png',
             "caption" => 'Ваша скидочная карта!'
