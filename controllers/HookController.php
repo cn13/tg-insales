@@ -29,23 +29,19 @@ class HookController extends Controller
      */
     public function actionIndex()
     {
-        file_put_contents(
-            '../runtime/messages_new.json',
-            print_r($this->message['message'], true) .
-            PHP_EOL . PHP_EOL,
-            FILE_APPEND
-        );
         if (CmdHelper::isCmd($this->message['message']['text'])) {
             CmdHelper::execute($this->message['message']);
         } else {
+            $chatId = $this->message['message']['chat']['id'];
+
+            $sender = (new SendCommand());
             if (isset($this->message['message']['contact'])) {
                 /** @var Transaction $tr */
                 $tr = Card::getDb()->beginTransaction();
                 try {
-                    $chatId = $this->message['message']['chat']['id'];
                     $card = Card::find()->where(['chat_id' => $chatId])->one();
                     if ($card) {
-                        (new SendCommand())->sendMessage(
+                        $sender->sendMessage(
                             $card->chat_id,
                             SlashCommand::mycard($this->message['message'])
                         );
@@ -59,7 +55,7 @@ class HookController extends Controller
                         [
                             "id"          => $user_id,
                             "gender"      => 1,
-                            "comment"     => (string)("Карта:" . $card->number . " ID:".$chatId),
+                            "comment"     => (string)("Карта:" . $card->number . " ID:" . $chatId),
                             "loyaltyCard" => [
                                 "prefix" => substr($card->number, 0, 2),
                                 "number" => substr($card->number, 2, 4),
@@ -81,7 +77,7 @@ class HookController extends Controller
                     );
                     $card->genQr();
 
-                    (new SendCommand())->sendMessage(
+                    $sender->sendMessage(
                         $chatId,
                         SlashCommand::mycard($this->message['message'])
                     );
@@ -90,6 +86,14 @@ class HookController extends Controller
                     $tr->rollBack();
                     throw $e;
                 }
+            }
+            if (\Yii::$app->cache->exists('mail_' . $chatId)) {
+                SlashCommand::sendMail($this->message['message']);
+                $sender->sendMessage(
+                    $chatId,
+                    'Ваше сообщение получено, спасибо!'
+                );
+                \Yii::$app->cache->delete('mail_' . $chatId);
             }
         }
     }

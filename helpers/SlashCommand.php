@@ -37,6 +37,31 @@ class SlashCommand
     }
 
     /**
+     * @param $m
+     * @return string
+     */
+    public static function mail($m)
+    {
+        $chatId = $message['chat']['id'] ?? '0000';
+        \Yii::$app->cache->set('mail_' . $chatId, true, 300);
+        return "Напишите ваше сообщение, мы обязательно его получим";
+    }
+
+    /**
+     * @param $m
+     * @return void
+     */
+    public static function sendMail($m)
+    {
+        $message = $m['text'];
+        $message = wordwrap($message, 70, "\r\n");
+        $mailheaders = "MIME-Version: 1.0;\r\n";
+        $mailheaders .= "From: bot@smoklife.ru <bot@smoklife.ru>\r\n";
+        $mailheaders .= "Reply-To: no-reply@smoklife.ru\r\n";
+        mail('m@cn13.ru', 'Запрос из бота SmokeLife', $message, $mailheaders);
+    }
+
+    /**
      * @param $message
      * @return string|string[]
      */
