@@ -81,7 +81,7 @@ class AqsiApi
         if ($response->isOk) {
             return $response->data;
         }
-        throw new Exception(print_r($response . json_encode($params), true));
+        throw new Exception(print_r($response, true) . json_encode($params));
     }
 
     /**
