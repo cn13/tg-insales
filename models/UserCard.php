@@ -23,6 +23,11 @@ class UserCard extends ActiveRecord
         return 'user_card';
     }
 
+    public static function primaryKey()
+    {
+        return ['user_id', 'card_id'];
+    }
+
     /**
      * {@inheritdoc}
      */
