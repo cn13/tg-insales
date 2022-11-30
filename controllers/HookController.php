@@ -34,6 +34,7 @@ class HookController extends Controller
             CmdHelper::execute($this->message['message']);
         } else {
             $chatId = $this->message['message']['chat']['id'];
+            $isBot = (bool)($this->message['message']['from']['is_bot'] ?? false);
 
             $sender = (new SendCommand());
             if (isset($this->message['message']['contact'])) {
@@ -88,10 +89,9 @@ class HookController extends Controller
                     throw $e;
                 }
             }
-            if (\Yii::$app->cache->exists('mail_' . $chatId)) {
-
+            if ($isBot !== true && \Yii::$app->cache->exists('mail_' . $chatId)) {
                 $sender->sendMessage(
-                    -1001867486645,
+                    '-1001867486645',
                     $this->message['message']['text']
                 );
 
