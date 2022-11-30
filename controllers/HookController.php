@@ -67,6 +67,10 @@ class HookController extends Controller
                     $user->setCard($card);
                     $card->genQr();
 
+                    $phone = $this->message['message']['contact']['phone_number'] ?? '';
+                    if (strlen($phone) > 11) {
+                        $phone = '';
+                    }
                     (new AqsiApi())->createClient(
                         [
                             "id"        => $user_id,
@@ -77,11 +81,7 @@ class HookController extends Controller
                                 "id" => "dfb6ca32-48b2-4889-98a8-6cebb2ca17cf"
                             ],
                             "birthDate" => date('Y-m-d', strtotime('now -20 year')),
-                            "mainPhone" => substr(
-                                preg_replace('#[^\d]#', '', $this->message['message']['contact']['phone_number']),
-                                0,
-                                11
-                            ),
+                            "mainPhone" => $phone
                         ]
                     );
 
