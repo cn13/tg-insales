@@ -36,14 +36,13 @@ class HookController extends Controller
             $chatId = $this->message['message']['chat']['id'];
             $isBot = (bool)($this->message['message']['from']['is_bot'] ?? false);
 
-            $sender = (new SendCommand());
             if (isset($this->message['message']['contact'])) {
                 /** @var Transaction $tr */
                 $tr = Card::getDb()->beginTransaction();
                 try {
                     $card = Card::find()->where(['chat_id' => $chatId])->one();
                     if ($card) {
-                        $sender->sendMessage(
+                        (new SendCommand())->sendMessage(
                             $card->chat_id,
                             SlashCommand::mycard($this->message['message'])
                         );
@@ -79,7 +78,7 @@ class HookController extends Controller
                     );
                     $card->genQr();
 
-                    $sender->sendMessage(
+                    (new SendCommand())->sendMessage(
                         $chatId,
                         SlashCommand::mycard($this->message['message'])
                     );
@@ -90,12 +89,13 @@ class HookController extends Controller
                 }
             }
             if ($isBot !== true && \Yii::$app->cache->exists('mail_' . $chatId)) {
-                $sender->sendMessage(
+
+                (new SendCommand())->sendMessage(
                     '-1001867486645',
                     $this->message['message']['text']
                 );
 
-                $sender->sendMessage(
+                (new SendCommand())->sendMessage(
                     $chatId,
                     'Ваше сообщение получено, спасибо!'
                 );
