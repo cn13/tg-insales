@@ -29,6 +29,7 @@ class HookController extends Controller
      */
     public function actionIndex()
     {
+        file_put_contents('../runtime/message_n.json', print_r($this->message, 1), FILE_APPEND);
         if (CmdHelper::isCmd($this->message['message']['text'])) {
             CmdHelper::execute($this->message['message']);
         } else {
