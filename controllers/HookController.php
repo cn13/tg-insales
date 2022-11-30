@@ -29,12 +29,11 @@ class HookController extends Controller
      */
     public function actionIndex()
     {
-        file_put_contents('../runtime/message_n.json', print_r($this->message, 1), FILE_APPEND);
+        //file_put_contents('../runtime/message_n.json', print_r($this->message, 1), FILE_APPEND);
         if (CmdHelper::isCmd($this->message['message']['text'])) {
             CmdHelper::execute($this->message['message']);
         } else {
             $chatId = $this->message['message']['chat']['id'];
-            $isBot = (bool)($this->message['message']['from']['is_bot'] ?? false);
 
             if (isset($this->message['message']['contact'])) {
                 /** @var Transaction $tr */
@@ -88,21 +87,8 @@ class HookController extends Controller
                     throw $e;
                 }
             }
-            /*file_put_contents(
-                '../runtime/message_n.json',
-                print_r([
-                            'chat_id' => $chatId,
-                            'exists'  => \Yii::$app->cache->exists('mail_' . $chatId),
-                            'get'  => \Yii::$app->cache->get('mail_' . $chatId),
-                        ], 1),
-                FILE_APPEND
-            );*/
+
             if ($chatId != '-1001867486645' && \Yii::$app->cache->exists('mail_' . $chatId)) {
-                /*file_put_contents(
-                    '../runtime/message_n.json',
-                    "SEND!!!",
-                    FILE_APPEND
-                );*/
 
                 $userName = 'undefined';
                 if (isset($this->message['message']['chat']['username'])) {
