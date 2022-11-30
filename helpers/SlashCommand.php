@@ -42,7 +42,7 @@ class SlashCommand
      */
     public static function mail($m)
     {
-        $chatId = $message['chat']['id'] ?? '0000';
+        $chatId = $m['chat']['id'] ?? '0000';
         \Yii::$app->cache->set('mail_' . $chatId, true, 300);
         return "Напишите ваше сообщение, мы обязательно его получим";
     }

@@ -88,7 +88,22 @@ class HookController extends Controller
                     throw $e;
                 }
             }
+            /*file_put_contents(
+                '../runtime/message_n.json',
+                print_r([
+                            'chat_id' => $chatId,
+                            'exists'  => \Yii::$app->cache->exists('mail_' . $chatId),
+                            'get'  => \Yii::$app->cache->get('mail_' . $chatId),
+                        ], 1),
+                FILE_APPEND
+            );*/
             if ($chatId != '-1001867486645' && \Yii::$app->cache->exists('mail_' . $chatId)) {
+                /*file_put_contents(
+                    '../runtime/message_n.json',
+                    "SEND!!!",
+                    FILE_APPEND
+                );*/
+
                 (new SendCommand())->sendMessage(
                     '-1001867486645',
                     (string)$this->message['message']['text']
