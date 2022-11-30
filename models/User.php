@@ -44,19 +44,14 @@ class User extends ActiveRecord
     public function setCard(Card $card): void
     {
         UserCard::updateAll(['active' => 0], ['user_id' => $this->id]);
-        $model = UserCard::find()->where(['user_id' => $this->id, 'card_id' => $card->id])->one();
-        if (!$model) {
-            $model = new UserCard(
-                [
-                    'user_id' => $this->id,
-                    'card_id' => $card->id,
-                    'active'  => 1
-                ]
-            );
-            $model->save();
-        } else {
-            $model->active();
-        }
+        $model = new UserCard(
+            [
+                'user_id' => $this->id,
+                'card_id' => $card->id,
+                'active'  => 1
+            ]
+        );
+        $model->save();
     }
 
     /**
