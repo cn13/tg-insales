@@ -2,103 +2,68 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
+use chillerlan\QRCode\QRCode;
+use yii\db\ActiveRecord;
+
+/**
+ * This is the model class for table "user_shop".
+ *
+ * @property int         $id
+ * @property string      $chat_id
+ * @property string      $name
+ * @property string      $phone
+ * @property string      $user_id
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ */
+class User extends ActiveRecord
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
-
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
-
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id)
+    public static function tableName()
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return 'user';
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public function rules()
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
+        return [
+            [['phone'], 'required'],
+            [['created_at', 'updated_at', 'phone', 'chat_id', 'name', 'user_id'], 'safe'],
+        ];
+    }
+
+    /**
+     * @param Card $card
+     * @return void
+     */
+    public function setCard(Card $card): void
+    {
+        UserCard::updateAll(['active' => 0], ['user_id' => $this->id]);
+        $model = UserCard::find()->where(['user_id' => $this->id, 'card_id' => $card->id])->one();
+        if (empty($model)) {
+            $model = new UserCard(
+                [
+                    'user_id' => $this->id,
+                    'card_id' => $card->id
+                ]
+            );
+            $model->save();
+        } else {
+            $model->active();
         }
-
-        return null;
     }
 
     /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
+     * @return Card|null
      */
-    public static function findByUsername($username)
+    public function getCard()
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthKey()
-    {
-        return $this->authKey;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->authKey === $authKey;
-    }
-
-    /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
-     */
-    public function validatePassword($password)
-    {
-        return $this->password === $password;
+        $userCard = UserCard::find()->where(['user_id' => $this->id, 'active' => 1])->one();
+        return Card::findOne($userCard->card_id);
     }
 }

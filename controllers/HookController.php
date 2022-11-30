@@ -6,6 +6,8 @@ use app\helpers\CmdHelper;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\models\Card;
+use app\models\User;
+use app\models\UserCard;
 use app\service\AqsiApi;
 use yii\db\Transaction;
 use yii\rest\Controller;
@@ -34,51 +36,52 @@ class HookController extends Controller
             CmdHelper::execute($this->message['message']);
         } else {
             $chatId = $this->message['message']['chat']['id'];
-
+            $sender = (new SendCommand());
             if (isset($this->message['message']['contact'])) {
                 /** @var Transaction $tr */
                 $tr = Card::getDb()->beginTransaction();
                 try {
-                    $card = Card::find()->where(['chat_id' => $chatId])->one();
-                    if ($card) {
-                        (new SendCommand())->sendMessage(
-                            $card->chat_id,
+                    $user = User::find()->where(['chat_id' => $chatId])->one();
+                    if ($user) {
+                        $sender->sendMessage(
+                            $user->chat_id,
                             SlashCommand::mycard($this->message['message'])
                         );
                         return;
                     }
 
-                    $card = Card::find()->where("chat_id is null")->one();
+                    $user_id = md5($chatId . $this->message['message']['contact']['phone_number']);
 
-                    $user_id = md5($chatId . $this->message['message']['contact']['phone_number'] . $card->id);
-                    (new AqsiApi())->createClient(
+                    $user = new User(
                         [
-                            "id"          => $user_id,
-                            "gender"      => 1,
-                            "comment"     => (string)("Карта:" . $card->number . " ID:" . $chatId),
-                            "loyaltyCard" => [
-                                "prefix" => substr($card->number, 0, 2),
-                                "number" => substr($card->number, 2, 4),
-                            ],
-                            "fio"         => (string)$this->message['message']['contact']['first_name'],
-                            "group"       => [
-                                "id" => (string)"0aa6dac6-73ce-4753-98fd-65ba4f9a3764"
-                            ],
-                            "birthDate"   => date('Y-m-d', strtotime('now -20 year')),
-                            "mainPhone"   => (string)$this->message['message']['contact']['phone_number'],
-                        ]
-                    );
-
-                    $card->updateAttributes(
-                        [
-                            'phone'   => (string)$this->message['message']['contact']['phone_number'],
+                            'phone'   => $this->message['message']['contact']['phone_number'],
+                            'name'    => $this->message['message']['contact']['first_name'] ?? '',
                             'chat_id' => (string)$chatId,
                             'user_id' => $user_id
                         ]
                     );
+                    $user->save();
+
+                    /** @var Card $card */
+                    $card = Card::getEmptyCard();
+                    $user->setCard($card);
                     $card->genQr();
 
-                    (new SendCommand())->sendMessage(
+                    (new AqsiApi())->createClient(
+                        [
+                            "id"        => $user_id,
+                            "gender"    => 1,
+                            "comment"   => (string)("Карта:" . $card->number . " ID:" . $chatId),
+                            "fio"       => (string)$this->message['message']['contact']['first_name'],
+                            "group"     => [
+                                "id" => "dfb6ca32-48b2-4889-98a8-6cebb2ca17cf"
+                            ],
+                            "birthDate" => date('Y-m-d', strtotime('now -20 year')),
+                            "mainPhone" => (string)$this->message['message']['contact']['phone_number'],
+                        ]
+                    );
+
+                    $sender->sendMessage(
                         $chatId,
                         SlashCommand::mycard($this->message['message'])
                     );
@@ -90,7 +93,7 @@ class HookController extends Controller
             }
 
             if ($chatId != '-1001867486645' && \Yii::$app->cache->exists('mail_' . $chatId)) {
-                $userName = 'undefined';
+                $userName = '';
                 if (isset($this->message['message']['chat']['username'])) {
                     $userName = '@' . $this->message['message']['chat']['username'];
                 }
@@ -98,13 +101,13 @@ class HookController extends Controller
                     $userName .= ' (' . $this->message['message']['chat']['first_name'] . ')';
                 }
 
-                (new SendCommand())->sendMessage(
+                $sender->sendMessage(
                     '-1001867486645',
                     $userName . ':' . PHP_EOL .
                     $this->message['message']['text']
                 );
 
-                (new SendCommand())->sendMessage(
+                $sender->sendMessage(
                     $chatId,
                     'Ваше сообщение получено, спасибо!'
                 );

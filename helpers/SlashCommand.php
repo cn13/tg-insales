@@ -3,6 +3,7 @@
 namespace app\helpers;
 
 use app\models\Card;
+use app\models\User;
 use chillerlan\QRCode\QRCode;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Contact;
@@ -54,7 +55,12 @@ class SlashCommand
     public static function mycard($message)
     {
         $chatId = $message['chat']['id'] ?? '0000';
-        $card = Card::find()->where(['chat_id' => $chatId])->one();
+        $user = User::find()->where(['chat_id' => $chatId])->one();
+        if (!$user) {
+            return "Вам необходимо выпустить карту";
+        }
+        /** @var Card $card */
+        $card = $user->getCard();
         if (!$card) {
             return "Вам необходимо выпустить карту";
         }

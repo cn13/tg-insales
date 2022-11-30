@@ -3,6 +3,8 @@
 namespace app\models;
 
 use chillerlan\QRCode\QRCode;
+use yii\db\ActiveRecord;
+use yii\db\Query;
 
 /**
  * This is the model class for table "user_shop".
@@ -14,7 +16,7 @@ use chillerlan\QRCode\QRCode;
  * @property string|null $created_at
  * @property string|null $updated_at
  */
-class Card extends \yii\db\ActiveRecord
+class Card extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -31,7 +33,7 @@ class Card extends \yii\db\ActiveRecord
     {
         return [
             [['number'], 'required'],
-            [['created_at', 'updated_at', 'phone', 'chat_id'], 'safe'],
+            [['created_at', 'updated_at', 'phone', 'chat_id', 'name'], 'safe'],
         ];
     }
 
@@ -40,12 +42,12 @@ class Card extends \yii\db\ActiveRecord
      */
     public function genQr(): void
     {
-        $path = \Yii::$app->basePath . "/web/" . $this->getPathFile();
+        $path = \Yii::$app->basePath . "/web/cards/";
         if (!file_exists($path) && !mkdir($path) && !is_dir($path)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $path));
         }
 
-        (new QRCode())->render($this->number, $path . '/card.png');
+        (new QRCode())->render($this->number, $path . '/' . md5($this->number) . '.png');
     }
 
     /**
@@ -53,14 +55,20 @@ class Card extends \yii\db\ActiveRecord
      */
     public function getQrLink()
     {
-        return 'https://api.smokelife.ru/' . $this->getPathFile() . '/card.png';
+        return 'https://api.smokelife.ru/cards/' . md5($this->number) . '.png';
     }
 
     /**
-     * @return string
+     * @param int $value
+     * @return array|ActiveRecord|null
      */
-    private function getPathFile()
+    public static function getEmptyCard(int $value = 5)
     {
-        return "/gen/" . $this->chat_id . '_05';
+        return Card::find()
+            ->leftJoin(UserCard::tableName(), 'card.id = user_card.card_id')
+            ->where('user_card.card_id is null')
+            ->andWhere(['card.value' => $value])
+            ->orderBy('number')
+            ->one();
     }
 }
