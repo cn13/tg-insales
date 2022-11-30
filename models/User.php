@@ -45,11 +45,12 @@ class User extends ActiveRecord
     {
         UserCard::updateAll(['active' => 0], ['user_id' => $this->id]);
         $model = UserCard::find()->where(['user_id' => $this->id, 'card_id' => $card->id])->one();
-        if (empty($model)) {
+        if (!$model) {
             $model = new UserCard(
                 [
                     'user_id' => $this->id,
-                    'card_id' => $card->id
+                    'card_id' => $card->id,
+                    'active'  => 1
                 ]
             );
             $model->save();

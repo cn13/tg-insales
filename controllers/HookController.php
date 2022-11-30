@@ -41,8 +41,15 @@ class HookController extends Controller
                 /** @var Transaction $tr */
                 $tr = Card::getDb()->beginTransaction();
                 try {
+                    /** @var User $user */
                     $user = User::find()->where(['chat_id' => $chatId])->one();
                     if ($user) {
+                        if (!$user->getCard()) {
+                            /** @var Card $card */
+                            $card = Card::getEmptyCard();
+                            $user->setCard($card);
+                            $card->genQr();
+                        }
                         $sender->sendMessage(
                             $user->chat_id,
                             SlashCommand::mycard($this->message['message'])
