@@ -106,7 +106,8 @@ class HookController extends Controller
 
                 (new SendCommand())->sendMessage(
                     '-1001867486645',
-                    (string)$this->message['message']['text']
+                    ($this->message['chat']['username'] ?? 'undefined') . ':' . PHP_EOL .
+                    $this->message['message']['text']
                 );
 
                 (new SendCommand())->sendMessage(
