@@ -50,7 +50,7 @@ class HookController extends Controller
 
                     $card = Card::find()->where("chat_id is null")->one();
 
-                    $user_id = md5($chatId . $this->message['message']['contact']['phone_number']);
+                    $user_id = md5($chatId . $this->message['message']['contact']['phone_number'] . $card->id);
                     (new AqsiApi())->createClient(
                         [
                             "id"          => $user_id,
@@ -64,7 +64,7 @@ class HookController extends Controller
                             "group"       => [
                                 "id" => (string)"0aa6dac6-73ce-4753-98fd-65ba4f9a3764"
                             ],
-                            "birthDate" => date('Y-m-d', strtotime('now -20 year')),
+                            "birthDate"   => date('Y-m-d', strtotime('now -20 year')),
                             "mainPhone"   => (string)$this->message['message']['contact']['phone_number'],
                         ]
                     );
@@ -90,7 +90,6 @@ class HookController extends Controller
             }
 
             if ($chatId != '-1001867486645' && \Yii::$app->cache->exists('mail_' . $chatId)) {
-
                 $userName = 'undefined';
                 if (isset($this->message['message']['chat']['username'])) {
                     $userName = '@' . $this->message['message']['chat']['username'];
