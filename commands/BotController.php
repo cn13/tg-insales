@@ -31,14 +31,7 @@ class BotController extends \yii\console\Controller
 
     public function actionQr()
     {
-        try {
-            (new SendCommand())->sendMessage(
-                '-1001867486645',
-                'test'
-            );
-        } catch (\Throwable $e) {
-            print_r($e->getMessage());
-        }
+        echo date('Y-m-d', strtotime('now -20 year'));
     }
 
     public function actionHookList()

@@ -64,6 +64,7 @@ class HookController extends Controller
                             "group"       => [
                                 "id" => (string)"0aa6dac6-73ce-4753-98fd-65ba4f9a3764"
                             ],
+                            "birthDate" => date('Y-m-d', strtotime('now -20 year')),
                             "mainPhone"   => (string)$this->message['message']['contact']['phone_number'],
                         ]
                     );
