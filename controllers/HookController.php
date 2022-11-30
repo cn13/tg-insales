@@ -77,7 +77,11 @@ class HookController extends Controller
                                 "id" => "dfb6ca32-48b2-4889-98a8-6cebb2ca17cf"
                             ],
                             "birthDate" => date('Y-m-d', strtotime('now -20 year')),
-                            "mainPhone" => (string)$this->message['message']['contact']['phone_number'],
+                            "mainPhone" => substr(
+                                preg_replace('#[^\d]#', '', $this->message['message']['contact']['phone_number']),
+                                0,
+                                11
+                            ),
                         ]
                     );
 
