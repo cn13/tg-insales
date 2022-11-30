@@ -104,9 +104,17 @@ class HookController extends Controller
                     FILE_APPEND
                 );*/
 
+                $userName = 'undefined';
+                if (isset($this->message['message']['chat']['username'])) {
+                    $userName = '@' . $this->message['message']['chat']['username'];
+                }
+                if (!empty($this->message['message']['chat']['first_name'])) {
+                    $userName .= ' (' . $this->message['message']['chat']['first_name'] . ')';
+                }
+
                 (new SendCommand())->sendMessage(
                     '-1001867486645',
-                    ($this->message['chat']['username'] ?? 'undefined') . ':' . PHP_EOL .
+                    $userName . ':' . PHP_EOL .
                     $this->message['message']['text']
                 );
 
