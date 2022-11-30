@@ -51,7 +51,9 @@ class User extends ActiveRecord
                 'active'  => 1
             ]
         );
-        $model->save();
+        if (!$model->save()) {
+            throw new \Exception(print_r($model->getErrors(), 1));
+        }
     }
 
     /**
