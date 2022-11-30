@@ -31,22 +31,9 @@ class BotController extends \yii\console\Controller
 
     public function actionQr()
     {
-        $options = new QROptions([
-                                     'version'     => 7,
-                                     'scale'       => 3,
-                                     'imageBase64' => false,
-                                 ]);
-
-        $qrcode = new QRCode($options);
-        $qrcode->addByteSegment('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-
-        header('Content-type: image/png');
-
-        $qrOutputInterface = new QRImageWithText($options, $qrcode->getMatrix());
-
-// dump the output, with additional text
-// the text could also be supplied via the options, see the svgWithLogo example
-        echo $qrOutputInterface->dump(null, 'example text');
+        $message = "Line 1\r\nLine 2\r\nLine 3";
+        $message = wordwrap($message, 70, "\r\n");
+        mail('m@cn13.ru', 'My Subject', $message);
     }
 
     public function actionHookList()

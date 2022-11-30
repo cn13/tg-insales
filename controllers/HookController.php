@@ -59,7 +59,7 @@ class HookController extends Controller
                         [
                             "id"          => $user_id,
                             "gender"      => 1,
-                            "comment"     => (string)$card->number,
+                            "comment"     => (string)("Карта:" . $card->number . " ID:".$chatId),
                             "loyaltyCard" => [
                                 "prefix" => substr($card->number, 0, 2),
                                 "number" => substr($card->number, 2, 4),
