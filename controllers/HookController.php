@@ -88,8 +88,7 @@ class HookController extends Controller
                     throw $e;
                 }
             }
-            if ($isBot !== true && \Yii::$app->cache->exists('mail_' . $chatId)) {
-
+            if ($chatId != '-1001867486645' && \Yii::$app->cache->exists('mail_' . $chatId)) {
                 (new SendCommand())->sendMessage(
                     '-1001867486645',
                     $this->message['message']['text']
