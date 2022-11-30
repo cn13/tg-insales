@@ -31,7 +31,7 @@ class HookController extends Controller
      */
     public function actionIndex()
     {
-        file_put_contents('../runtime/message_n.json', print_r($this->message, 1), FILE_APPEND);
+        //file_put_contents('../runtime/message_n.json', print_r($this->message, 1), FILE_APPEND);
         if (CmdHelper::isCmd($this->message['message']['text'])) {
             CmdHelper::execute($this->message['message']);
         } else {
@@ -44,7 +44,7 @@ class HookController extends Controller
                     /** @var User $user */
                     $user = User::find()->where(['chat_id' => $chatId])->one();
                     if ($user) {
-                        if (!$user->getCard()) {
+                        if ($user->getCard() === null) {
                             /** @var Card $card */
                             $card = Card::getEmptyCard();
                             $user->setCard($card);
@@ -54,6 +54,7 @@ class HookController extends Controller
                             $user->chat_id,
                             SlashCommand::mycard($this->message['message'])
                         );
+                        $tr->commit();
                         return;
                     }
 
