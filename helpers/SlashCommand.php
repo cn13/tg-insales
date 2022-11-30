@@ -48,20 +48,6 @@ class SlashCommand
     }
 
     /**
-     * @param $m
-     * @return void
-     */
-    public static function sendMail($m)
-    {
-        $message = $m['text'];
-        $message = wordwrap($message, 70, "\r\n");
-        $mailheaders = "MIME-Version: 1.0;\r\n";
-        $mailheaders .= "From: bot@smoklife.ru <bot@smoklife.ru>\r\n";
-        $mailheaders .= "Reply-To: no-reply@smoklife.ru\r\n";
-        mail('m@cn13.ru', 'Запрос из бота SmokeLife', $message, $mailheaders);
-    }
-
-    /**
      * @param $message
      * @return string|string[]
      */

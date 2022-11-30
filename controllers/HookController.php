@@ -89,11 +89,17 @@ class HookController extends Controller
                 }
             }
             if (\Yii::$app->cache->exists('mail_' . $chatId)) {
-                SlashCommand::sendMail($this->message['message']);
+
+                $sender->sendMessage(
+                    -1001867486645,
+                    $this->message['message']['text']
+                );
+
                 $sender->sendMessage(
                     $chatId,
                     'Ваше сообщение получено, спасибо!'
                 );
+
                 \Yii::$app->cache->delete('mail_' . $chatId);
             }
         }
