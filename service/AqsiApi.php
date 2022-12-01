@@ -16,6 +16,7 @@ class AqsiApi
         'goods'         => '/Goods/list',
         'goodsCategory' => '/GoodsCategory/list',
         'createClient'  => '/Clients',
+        'getClient'     => '/Clients/',
     ];
 
     public function __construct()
@@ -38,6 +39,11 @@ class AqsiApi
         $this->post('createClient', $params);
     }
 
+    public function getClient($id)
+    {
+        return $this->get($this->baseUrl . '/Clients/' . $id, [], 'GET', false);
+    }
+
     /**
      * @param $url
      * @param $params
@@ -46,10 +52,10 @@ class AqsiApi
      * @throws Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function get($url, $params = [], $method = 'GET')
+    public function get($url, $params = [], $method = 'GET', $alias = true)
     {
         $response = $this->createRequest()
-            ->setUrl($this->getUrl($url))
+            ->setUrl($alias ? $this->getUrl($url) : $url)
             ->addData($params)
             ->setMethod($method)
             ->send();

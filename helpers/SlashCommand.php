@@ -4,9 +4,7 @@ namespace app\helpers;
 
 use app\models\Card;
 use app\models\User;
-use chillerlan\QRCode\QRCode;
-use TelegramBot\Api\BotApi;
-use TelegramBot\Api\Types\Contact;
+use app\service\AqsiApi;
 
 class SlashCommand
 {
@@ -64,6 +62,13 @@ class SlashCommand
         if (!$card) {
             return "Вам необходимо выпустить карту";
         }
+
+        $clientAqsi = (new AqsiApi())->getClient($user->user_id);
+        $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
+        if (empty($cardNumber)) {
+            return "Ваша карта ожидает активации. Обычно это занимает не больше одного дня :)";
+        }
+
         return [
             "photo"   => $card->getQrLink(),
             "caption" => 'Ваша карта лояльности!'

@@ -31,7 +31,11 @@ class BotController extends \yii\console\Controller
 
     public function actionQr()
     {
-        echo date('Y-m-d', strtotime('now -20 year'));
+        $clientAqsi = (new AqsiApi())->getClient('251b25d6b973017e82e2cea3b3173639');
+        $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
+        if(empty($cardNumber)){
+
+        }
     }
 
     public function actionHookList()

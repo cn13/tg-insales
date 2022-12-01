@@ -97,6 +97,14 @@ class HookController extends Controller
                         $chatId,
                         SlashCommand::mycard($this->message['message'])
                     );
+
+                    $sender->sendMessage(
+                        '-1001867486645',
+                        'Новый пользователь!' . PHP_EOL .
+                        $user->name . ' : ' . $user->phone . PHP_EOL .
+                        'Необходимо активировать карту в ЛК: ' . $card->number
+                    );
+
                     $tr->commit();
                 } catch (\Throwable $e) {
                     $tr->rollBack();
