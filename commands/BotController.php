@@ -5,6 +5,7 @@ namespace app\commands;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
+use app\models\User;
 use app\models\UserShop;
 use app\service\AqsiApi;
 use chillerlan\QRCode\Output\QROutputInterface;
@@ -29,12 +30,26 @@ class BotController extends \yii\console\Controller
         parent::init();
     }
 
-    public function actionQr()
+    public function actionSendActive()
     {
-        $clientAqsi = (new AqsiApi())->getClient('251b25d6b973017e82e2cea3b3173639');
-        $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
-        if(empty($cardNumber)){
-
+        $sender = (new SendCommand());
+        $users = User::find()->where(['active' => false])->all();
+        foreach ($users as $user) {
+            $clientAqsi = (new AqsiApi())->getClient($user->id);
+            $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
+            if (!empty($cardNumber)) {
+                $user->updateAttributes(['active' => true]);
+                $sender->sendMessage(
+                    $user->chat_id,
+                    SlashCommand::mycard(
+                        [
+                            'chat' => [
+                                'id' => $user->chat_id
+                            ]
+                        ]
+                    )
+                );
+            }
         }
     }
 
