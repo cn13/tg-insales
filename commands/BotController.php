@@ -35,7 +35,7 @@ class BotController extends \yii\console\Controller
         $sender = (new SendCommand());
         $users = User::find()->where(['active' => false])->all();
         foreach ($users as $user) {
-            $clientAqsi = (new AqsiApi())->getClient($user->id);
+            $clientAqsi = (new AqsiApi())->getClient($user->user_id);
             $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
             if (!empty($cardNumber)) {
                 $user->updateAttributes(['active' => true]);
