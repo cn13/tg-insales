@@ -8,9 +8,7 @@ use app\helpers\ViewHelper;
 use app\models\User;
 use app\models\UserShop;
 use app\service\AqsiApi;
-use chillerlan\QRCode\Output\QROutputInterface;
-use chillerlan\QRCode\QRCode;
-use chillerlan\QRCode\QROptions;
+use yii\httpclient\Client;
 
 /**
  * @property $token string
@@ -25,8 +23,8 @@ class BotController extends \yii\console\Controller
 
     public function init()
     {
-        $this->hook_url = \Yii::$app->params['hook_url'];
-        $this->cmd = new SendCommand();
+        /* $this->hook_url = \Yii::$app->params['hook_url'];
+         $this->cmd = new SendCommand();*/
         parent::init();
     }
 
@@ -81,9 +79,28 @@ class BotController extends \yii\console\Controller
         }
     }
 
-    public function actionTest()
+    public function actionLogin()
     {
-        $user = UserShop::findOne(1);
-        echo SlashCommand::run($user, '\start');
+        $urlLogin = 'https://lk.aqsi.ru/auth';
+        $cookieFile = __DIR__ . '/../runtime/cookie.txt';
+
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('POST')
+            ->setUrl($urlLogin)
+            ->setContent('{"emailOrPhone": "cozanostra.me@yandex.ru","password": "usebet051"}')
+            ->addHeaders(
+                [
+                    ":authority:lk.aqsi.ru",
+                    ":method: POST",
+                    ":path: /auth",
+                    ":scheme: https",
+                    "accept: application/json, text/plain, */*",
+                    "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 YaBrowser/22.11.0.2500 Yowser/2.5 Safari/537.36",
+                    "origin: https://lk.aqsi.ru",
+                    "referer: https://lk.aqsi.ru/login",
+                ]
+            )->send();
+        print_r($response);
     }
 }
