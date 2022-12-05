@@ -3,6 +3,7 @@
 namespace app\service;
 
 use yii\httpclient\Client;
+use yii\httpclient\CurlTransport;
 use yii\httpclient\Exception;
 use yii\httpclient\Request;
 
@@ -13,10 +14,11 @@ class AqsiApi
     private $baseUrl = 'https://api.aqsi.ru/pub/v2';
 
     private $url = [
-        'goods'         => '/Goods/list',
+        'goods' => '/Goods/list',
         'goodsCategory' => '/GoodsCategory/list',
-        'createClient'  => '/Clients',
-        'getClient'     => '/Clients/',
+        'createClient' => '/Clients',
+        'getClient' => '/Clients/',
+        'getReceipts' => '/Receipts/',
     ];
 
     public function __construct()
@@ -42,6 +44,11 @@ class AqsiApi
     public function getClient($id)
     {
         return $this->get($this->baseUrl . '/Clients/' . $id, [], 'GET', false);
+    }
+
+    public function getReceipts($params)
+    {
+        return $this->get('getReceipts', $params);
     }
 
     /**
@@ -96,7 +103,19 @@ class AqsiApi
      */
     private function createRequest(): Request
     {
-        return (new Client())->createRequest()->setHeaders($this->getAuthHeaders());
+        return (new Client(
+            [
+                'transport' => CurlTransport::class //только cURL поддерживает нужные нам параметры
+            ]
+        ))->createRequest()
+            ->setOptions(
+                [
+                    CURLOPT_PROXY => 'http://proxy.equifax.local:8090',
+                    CURLOPT_SSL_VERIFYSTATUS => false,
+                    CURLOPT_SSL_VERIFYPEER => false
+                ]
+            )
+            ->setHeaders($this->getAuthHeaders());
     }
 
     /**

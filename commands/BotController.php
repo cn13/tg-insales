@@ -8,7 +8,6 @@ use app\helpers\ViewHelper;
 use app\models\User;
 use app\models\UserShop;
 use app\service\AqsiApi;
-use yii\httpclient\Client;
 
 /**
  * @property $token string
@@ -79,28 +78,51 @@ class BotController extends \yii\console\Controller
         }
     }
 
-    public function actionLogin()
+    public function actionCheck()
     {
-        $urlLogin = 'https://lk.aqsi.ru/auth';
-        $cookieFile = __DIR__ . '/../runtime/cookie.txt';
+        $sender = new SendCommand();
+        $rootDir = __DIR__ . '/../runtime/check';
+        if (!file_exists($rootDir) && !mkdir($rootDir) && !is_dir($rootDir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $rootDir));
+        }
+        $checkDir = $rootDir . '/' . date('Y-m-d');
+        if (!file_exists($checkDir) && !mkdir($checkDir) && !is_dir($checkDir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $checkDir));
+        }
 
-        $client = new Client();
-        $response = $client->createRequest()
-            ->setMethod('POST')
-            ->setUrl($urlLogin)
-            ->setContent('{"emailOrPhone": "cozanostra.me@yandex.ru","password": "usebet051"}')
-            ->addHeaders(
-                [
-                    ":authority:lk.aqsi.ru",
-                    ":method: POST",
-                    ":path: /auth",
-                    ":scheme: https",
-                    "accept: application/json, text/plain, */*",
-                    "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 YaBrowser/22.11.0.2500 Yowser/2.5 Safari/537.36",
-                    "origin: https://lk.aqsi.ru",
-                    "referer: https://lk.aqsi.ru/login",
-                ]
-            )->send();
-        print_r($response);
+        $result = (new AqsiApi())->getReceipts(
+            [
+                'filtered.BeginDate' => date('Y-m-d 00:00:00'),
+                'filtered.Operation' => 1,
+                'pageSize' => 100
+            ]
+        );
+
+        if (empty($result['rows'])) {
+            \Yii::$app->end();
+        }
+
+        foreach ($result['rows'] as $check) {
+            if (file_exists($checkDir . DIRECTORY_SEPARATOR . $check['id'])) {
+                continue;
+            }
+
+
+            $text = 'НОВЫЙ ЧЕК ' . PHP_EOL;
+            $text .= '----' . PHP_EOL;
+            foreach ($check['content']['positions'] as $position) {
+                $text .= $position['text'] . ' - ' . $position['price'] . ' руб.' . PHP_EOL;
+            }
+            $text .= '----' . PHP_EOL;
+            $text .= 'ИТОГО: ' . $check['amount'] . ' руб.' . PHP_EOL;
+            $text .= PHP_EOL;
+
+            $sender->sendMessage(
+                '-873525534',
+                $text
+            );
+
+            file_put_contents($checkDir . DIRECTORY_SEPARATOR . $check['id'], 1);
+        }
     }
 }
