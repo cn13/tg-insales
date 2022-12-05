@@ -85,12 +85,12 @@ class BotController extends \yii\console\Controller
         if (!file_exists($rootDir) && !mkdir($rootDir) && !is_dir($rootDir)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $rootDir));
         }
-        chmod($rootDir, 777);
+        chmod($rootDir, 0777);
         $checkDir = $rootDir . '/' . date('Y-m-d');
         if (!file_exists($checkDir) && !mkdir($checkDir) && !is_dir($checkDir)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $checkDir));
         }
-        chmod($checkDir, 777);
+        chmod($checkDir, 0777);
 
         $result = (new AqsiApi())->getReceipts(
             [
