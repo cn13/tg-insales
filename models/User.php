@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
  * @property string $chat_id
  * @property string $name
  * @property string $phone
- * @property bool $active
+ * @property int $active
  * @property string $user_id
  * @property string|null $created_at
  * @property string|null $updated_at
