@@ -69,7 +69,7 @@ class SendCommand
     /**
      * @throws \JsonException
      */
-    public function sendText($id, $text): array
+    public function sendText($id, $text)
     {
         $params = [
             'chat_id' => $id,
@@ -86,7 +86,7 @@ class SendCommand
     /**
      * @throws \JsonException
      */
-    public function sendPhoto($id, $photo): array
+    public function sendPhoto($id, $photo)
     {
         $params = [
             'chat_id' => $id,
