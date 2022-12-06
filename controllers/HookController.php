@@ -7,7 +7,6 @@ use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\models\Card;
 use app\models\User;
-use app\models\UserCard;
 use app\service\AqsiApi;
 use yii\db\Transaction;
 use yii\rest\Controller;
@@ -32,7 +31,7 @@ class HookController extends Controller
     public function actionIndex()
     {
         //file_put_contents('../runtime/message_n.json', print_r($this->message, 1), FILE_APPEND);
-        if (CmdHelper::isCmd($this->message['message']['text'])) {
+        if (isset($this->message['message']['text']) && CmdHelper::isCmd($this->message['message']['text'])) {
             CmdHelper::execute($this->message['message']);
         } else {
             $chatId = $this->message['message']['chat']['id'];
@@ -62,8 +61,8 @@ class HookController extends Controller
 
                     $user = new User(
                         [
-                            'phone'   => $this->message['message']['contact']['phone_number'],
-                            'name'    => $this->message['message']['contact']['first_name'] ?? '',
+                            'phone' => $this->message['message']['contact']['phone_number'],
+                            'name' => $this->message['message']['contact']['first_name'] ?? '',
                             'chat_id' => (string)$chatId,
                             'user_id' => $user_id
                         ]
@@ -81,11 +80,11 @@ class HookController extends Controller
                     }
                     (new AqsiApi())->createClient(
                         [
-                            "id"        => $user_id,
-                            "gender"    => 1,
-                            "comment"   => (string)("Карта:" . $card->number . " ID:" . $chatId),
-                            "fio"       => (string)$this->message['message']['contact']['first_name'],
-                            "group"     => [
+                            "id" => $user_id,
+                            "gender" => 1,
+                            "comment" => (string)("Карта:" . $card->number . " ID:" . $chatId),
+                            "fio" => (string)$this->message['message']['contact']['first_name'],
+                            "group" => [
                                 "id" => "dfb6ca32-48b2-4889-98a8-6cebb2ca17cf"
                             ],
                             "birthDate" => date('Y-m-d', strtotime('now -20 year')),
