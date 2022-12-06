@@ -2,17 +2,17 @@
 
 namespace app\models;
 
-use chillerlan\QRCode\QRCode;
 use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "user_shop".
  *
- * @property int         $id
- * @property string      $chat_id
- * @property string      $name
- * @property string      $phone
- * @property string      $user_id
+ * @property int $id
+ * @property string $chat_id
+ * @property string $name
+ * @property string $phone
+ * @property bool $active
+ * @property string $user_id
  * @property string|null $created_at
  * @property string|null $updated_at
  */
@@ -32,8 +32,8 @@ class User extends ActiveRecord
     public function rules()
     {
         return [
-            [['phone'], 'required'],
-            [['created_at', 'updated_at', 'phone', 'chat_id', 'name', 'user_id'], 'safe'],
+            [['phone', 'chat_id'], 'required'],
+            [['created_at', 'updated_at', 'phone', 'chat_id', 'name', 'user_id', 'active'], 'safe'],
         ];
     }
 
@@ -48,7 +48,7 @@ class User extends ActiveRecord
             [
                 'user_id' => $this->id,
                 'card_id' => $card->id,
-                'active'  => 1
+                'active' => 1
             ]
         );
         if (!$model->save()) {

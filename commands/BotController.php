@@ -5,6 +5,7 @@ namespace app\commands;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
+use app\models\Card;
 use app\models\User;
 use app\models\UserShop;
 use app\service\AqsiApi;
@@ -29,12 +30,19 @@ class BotController extends \yii\console\Controller
 
     public function actionSendActive()
     {
+        $prefix = [
+            2022 => 5,
+            3022 => 7,
+            5022 => 10,
+            7777 => 15,
+        ];
+
         $sender = (new SendCommand());
-        $users = User::find()->where(['active' => false])->all();
+        $users = User::find()->all();
         foreach ($users as $user) {
             $clientAqsi = (new AqsiApi())->getClient($user->user_id);
             $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
-            if (!empty($cardNumber)) {
+            if (!empty($cardNumber) && $user->active === false) {
                 $user->updateAttributes(['active' => true]);
                 $sender->sendMessage(
                     $user->chat_id,
@@ -46,6 +54,34 @@ class BotController extends \yii\console\Controller
                         ]
                     )
                 );
+            }
+
+            if ($user->active === true) {
+                $cardNumber = trim($clientAqsi['loyaltyCard']['prefix'] . $clientAqsi['loyaltyCard']['number']);
+                $cardInDB = $user->getCard()->number;
+                if ($cardNumber !== $cardInDB) {
+                    $card = Card::find()->where(['number' => $cardNumber])->one();
+                    if (!$card) {
+                        $card = new Card(
+                            [
+                                'number' => $cardNumber,
+                                'value' => $prefix[$clientAqsi['loyaltyCard']['prefix']]
+                            ]
+                        );
+                        $card->save();
+                    }
+                    $user->setCard($card);
+                    $sender->sendMessage(
+                        $user->chat_id,
+                        SlashCommand::mycard(
+                            [
+                                'chat' => [
+                                    'id' => $user->chat_id
+                                ]
+                            ]
+                        )
+                    );
+                }
             }
         }
     }

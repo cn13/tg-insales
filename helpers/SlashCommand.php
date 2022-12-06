@@ -66,12 +66,12 @@ class SlashCommand
         $clientAqsi = (new AqsiApi())->getClient($user->user_id);
         $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
         if (empty($cardNumber)) {
-            return "Ваша карта ожидает активации. Обычно это занимает не больше одного дня :)";
+            return "Ваша карта ожидает активации. Обычно это занимает не больше 1 часа :)";
         }
 
         return [
-            "photo"   => $card->getQrLink(),
-            "caption" => 'Ваша карта лояльности!'
+            "photo" => $card->getQrLink(),
+            "caption" => 'Ваша карта лояльности!' . PHP_EOL . 'Скидка ' . $card->value . '%'
         ];
     }
 
@@ -81,16 +81,16 @@ class SlashCommand
     private static function newcard($message)
     {
         $keyboard = [
-            'keyboard'          => [
+            'keyboard' => [
                 [
                     [
-                        "text"            => "Отправить номер телефона",
+                        "text" => "Отправить номер телефона",
                         "request_contact" => true
                     ]
                 ]
             ],
             "one_time_keyboard" => true,
-            "resize_keyboard"   => true
+            "resize_keyboard" => true
         ];
         return ['reply_markup' => json_encode($keyboard)];
     }
