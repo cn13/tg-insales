@@ -37,7 +37,7 @@ class HookController extends Controller
                 \Yii::$app->end();
             }
 
-            if (isset($this->message['message']['text']) && CmdHelper::isCmd($this->message['message']['text'])) {
+            if (!empty($this->message['message']['text']) && CmdHelper::isCmd($this->message['message']['text'])) {
                 CmdHelper::execute($this->message['message']);
             } else {
                 $chatId = $this->message['message']['chat']['id'];
