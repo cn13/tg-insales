@@ -69,10 +69,12 @@ class SlashCommand
             return "Ваша карта ожидает активации. Обычно это занимает не больше 1 часа :)";
         }
 
-        return [
+        $r = [
             "photo" => $card->getQrLink(),
             "caption" => 'Ваша карта лояльности!' . PHP_EOL . 'Скидка ' . $card->value . '%'
         ];
+
+        file_put_contents('../runtime/result.log', print_r($r, 1), FILE_APPEND);
     }
 
     /**
