@@ -61,8 +61,10 @@ class SendCommand
             $this->sendText($id, $message);
         } elseif (isset($message['reply_markup'])) {
             $this->sendKeyBoard($id, $message);
-        } else {
+        } elseif (isset($message['photo'])) {
             $this->sendPhoto($id, $message);
+        } else {
+            file_put_contents('../runtime/XZ_message.log', print_r($message, 1), FILE_APPEND);
         }
     }
 
