@@ -141,7 +141,11 @@ class HookController extends Controller
                 }
             }
         } catch (\Throwable $e) {
-            file_put_contents('../runtime/errors.log', $e->getMessage() . PHP_EOL, FILE_APPEND);
+            file_put_contents(
+                '../runtime/errors.log',
+                $e->getMessage() . PHP_EOL . $e->getTraceAsString() . PHP_EOL,
+                FILE_APPEND
+            );
             throw $e;
         }
     }
