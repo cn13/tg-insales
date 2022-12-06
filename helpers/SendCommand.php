@@ -21,7 +21,7 @@ class SendCommand
             $url .= '?' . http_build_query($params);
         }*/
         $result = json_decode($this->curl($url, $params), true);
-        file_put_contents('../runtime/result_send.json', print_r($result) . PHP_EOL, FILE_APPEND);
+        //file_put_contents('../runtime/result_send.json', print_r($result) . PHP_EOL, FILE_APPEND);
         return $result;
     }
 
