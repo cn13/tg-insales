@@ -59,7 +59,7 @@ class SlashCommand
         }
         /** @var Card $card */
         $card = $user->getCard();
-        if (!$card) {
+        if ($card === null) {
             return "Вам необходимо выпустить карту";
         }
 

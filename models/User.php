@@ -61,9 +61,9 @@ class User extends ActiveRecord
      */
     public function getCard()
     {
-        $userCard = UserCard::find()->where(['user_id' => $this->id, 'active' => 1])->limit(1)->one();
+        $userCard = UserCard::find()->where(['user_id' => $this->id, 'active' => 1])->one();
         if ($userCard) {
-            return Card::findOne($userCard->card_id);
+            return Card::find()->where(['id' => $userCard->card_id])->one();
         }
         return null;
     }
