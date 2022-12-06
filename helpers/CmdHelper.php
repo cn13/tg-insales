@@ -50,5 +50,14 @@ class CmdHelper
             $m['chat']['id'],
             $response
         );
+        file_put_contents(
+            '../runtime/send.log',
+            print_r([
+                        'chat_id' => $m['chat']['id'],
+                        'response' => $response
+
+                    ], 1),
+            FILE_APPEND
+        );
     }
 }
