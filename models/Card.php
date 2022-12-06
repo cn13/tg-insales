@@ -45,8 +45,8 @@ class Card extends ActiveRecord
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $path));
         }
 
-        if (!file_exists($path . '/' . md5($this->number) . '.png')) {
-            (new QRCode())->render($this->number, $path . '/' . md5($this->number) . '.png');
+        if (!file_exists($path . '/' . $this->number . '.png')) {
+            (new QRCode())->render($this->number, $path . '/' . $this->number . '.png');
         }
     }
 
@@ -56,7 +56,7 @@ class Card extends ActiveRecord
     public function getQrLink()
     {
         $this->genQr();
-        return 'https://api.smokelife.ru/cards/' . md5($this->number) . '.png';
+        return 'https://api.smokelife.ru/cards/' . $this->number . '.png';
     }
 
     /**
