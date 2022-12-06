@@ -71,7 +71,11 @@ class SlashCommand
 
         $r = [
             "photo" => $card->getQrLink(),
-            "caption" => 'Ваша карта лояльности!' . PHP_EOL . 'Скидка ' . $card->value . '%'
+            "caption" => str_pad(
+                    '',
+                    random_int(1, 12),
+                    '-'
+                ) . PHP_EOL . 'Ваша карта лояльности!' . PHP_EOL . ' Скидка ' . $card->value . '%'
         ];
 
         file_put_contents('../runtime/result.log', print_r($r, 1), FILE_APPEND);
