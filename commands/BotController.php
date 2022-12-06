@@ -54,7 +54,7 @@ class BotController extends \yii\console\Controller
                         ]
                     )
                 );
-            } elseif ($user->active === 1) {
+            } elseif ($user->active == 1) {
                 $cardNumber = trim($clientAqsi['loyaltyCard']['prefix'] . $clientAqsi['loyaltyCard']['number']);
                 $cardInDB = $user->getCard()->number;
                 if ($cardNumber !== $cardInDB) {

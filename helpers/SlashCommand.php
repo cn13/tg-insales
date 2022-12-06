@@ -53,6 +53,7 @@ class SlashCommand
     public static function mycard($message)
     {
         $chatId = $message['chat']['id'] ?? '0000';
+        file_put_contents('../runtime/mycard_all.json', $chatId . PHP_EOL, FILE_APPEND);
         $user = User::find()->where(['chat_id' => $chatId])->one();
         if (!$user) {
             return "Вам необходимо выпустить карту";
