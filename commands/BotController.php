@@ -42,7 +42,7 @@ class BotController extends \yii\console\Controller
         foreach ($users as $user) {
             $clientAqsi = (new AqsiApi())->getClient($user->user_id);
             $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
-            if (!empty($cardNumber) && $user->active === false) {
+            if (!empty($cardNumber) && $user->active == 0) {
                 $user->updateAttributes(['active' => true]);
                 $sender->sendMessage(
                     $user->chat_id,
@@ -54,9 +54,7 @@ class BotController extends \yii\console\Controller
                         ]
                     )
                 );
-            }
-
-            if ($user->active === 1) {
+            } elseif ($user->active === 1) {
                 $cardNumber = trim($clientAqsi['loyaltyCard']['prefix'] . $clientAqsi['loyaltyCard']['number']);
                 $cardInDB = $user->getCard()->number;
                 if ($cardNumber !== $cardInDB) {
