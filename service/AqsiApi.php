@@ -108,13 +108,13 @@ class AqsiApi
                 'transport' => CurlTransport::class //только cURL поддерживает нужные нам параметры
             ]
         ))->createRequest()
-           /* ->setOptions(
+            ->setOptions(
                 [
-                    CURLOPT_PROXY => 'http://proxy.equifax.local:8090',
+           //         CURLOPT_PROXY => 'http://proxy.equifax.local:8090',
                     CURLOPT_SSL_VERIFYSTATUS => false,
                     CURLOPT_SSL_VERIFYPEER => false
                 ]
-            )*/
+            )
             ->setHeaders($this->getAuthHeaders());
     }
 

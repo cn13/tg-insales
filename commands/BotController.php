@@ -67,7 +67,7 @@ class BotController extends \yii\console\Controller
                         $card = new Card(
                             [
                                 'number' => $cardNumber,
-                                'value' => $prefix[$clientAqsi['loyaltyCard']['prefix']]
+                                'value'  => $prefix[$clientAqsi['loyaltyCard']['prefix']]
                             ]
                         );
                         $card->save();
@@ -118,6 +118,11 @@ class BotController extends \yii\console\Controller
 
     public function actionCheck()
     {
+        $type = [
+            1 => 'ПРОДАЖА',
+            2 => 'ВОЗВРАТ'
+        ];
+
         $sender = new SendCommand();
         $rootDir = __DIR__ . '/../runtime/check';
         if (!file_exists($rootDir) && !mkdir($rootDir) && !is_dir($rootDir)) {
@@ -132,9 +137,8 @@ class BotController extends \yii\console\Controller
 
         $result = (new AqsiApi())->getReceipts(
             [
-                'filtered.BeginDate' => date('Y-m-d 00:00:00'),
-                'filtered.Operation' => 1,
-                'pageSize' => 100
+                'filtered.BeginDate' => date('Y-m-dd 00:00:00'),
+                'pageSize'           => 100
             ]
         );
 
@@ -147,11 +151,17 @@ class BotController extends \yii\console\Controller
                 continue;
             }
 
-
-            $text = 'НОВЫЙ ЧЕК ' . PHP_EOL;
+            $text = $type[$check['content']['type']] . PHP_EOL;
             $text .= '----' . PHP_EOL;
+            $i = 0;
             foreach ($check['content']['positions'] as $position) {
-                $text .= $position['text'] . ' - ' . $position['price'] . ' руб.' . PHP_EOL;
+                $text .= sprintf(
+                    '№%s. %s (%s шт.) = %s руб.' . PHP_EOL,
+                    (++$i),
+                    $position['text'],
+                    $position['quantity'],
+                    $position['price']
+                );
             }
             $text .= '----' . PHP_EOL;
             $text .= 'ИТОГО: ' . $check['amount'] . ' руб.' . PHP_EOL;
