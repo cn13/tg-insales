@@ -137,7 +137,7 @@ class BotController extends \yii\console\Controller
 
         $result = (new AqsiApi())->getReceipts(
             [
-                'filtered.BeginDate' => date('Y-m-dd 00:00:00'),
+                'filtered.BeginDate' => date('Y-m-d 00:00:00'),
                 'pageSize'           => 100
             ]
         );
