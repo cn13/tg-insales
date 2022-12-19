@@ -6,6 +6,7 @@ use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
 use app\models\Card;
+use app\models\Good;
 use app\models\User;
 use app\models\UserShop;
 use app\service\AqsiApi;
@@ -67,7 +68,7 @@ class BotController extends \yii\console\Controller
                         $card = new Card(
                             [
                                 'number' => $cardNumber,
-                                'value'  => $prefix[$clientAqsi['loyaltyCard']['prefix']]
+                                'value' => $prefix[$clientAqsi['loyaltyCard']['prefix']]
                             ]
                         );
                         $card->save();
@@ -91,6 +92,39 @@ class BotController extends \yii\console\Controller
     public function actionHookList()
     {
         print_r($this->cmd->send('getWebhookInfo'));
+    }
+
+    public function actionGoods()
+    {
+        $aqsi = (new AqsiApi());
+        $i = 0;
+        do {
+            $i++;
+            $result = $aqsi->getGoods(['pageNumber' => $i]);
+            if (empty($result['rows'])) {
+                echo 'stop';
+                break;
+            }
+            foreach ($result['rows'] as $row) {
+                $good = $aqsi->getGood($row['id']);
+                $model = Good::findOne($good['id']);
+                if (!$model) {
+                    $model = new Good(
+                        [
+                            'uniq_id' => $good['id'],
+                            'name' => $good['name'],
+                            'barcodes' => $good['barcodes'],
+                        ]
+                    );
+                } else {
+                    $model->barcodes = $good['barcodes'];
+                }
+                if (!$model->save()) {
+                    print_r($model->getFirstErrors());
+                    exit;
+                }
+            }
+        } while (true);
     }
 
     public function actionSetHook()
@@ -138,7 +172,7 @@ class BotController extends \yii\console\Controller
         $result = (new AqsiApi())->getReceipts(
             [
                 'filtered.BeginDate' => date('Y-m-d 00:00:00'),
-                'pageSize'           => 100
+                'pageSize' => 100
             ]
         );
 

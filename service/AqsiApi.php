@@ -31,9 +31,14 @@ class AqsiApi
         return $this->get('goodsCategory');
     }
 
-    public function getGoods()
+    public function getGoods($params)
     {
-        return $this->get('goods');
+        return $this->get('goods', $params);
+    }
+
+    public function getGood($id)
+    {
+        return $this->get($this->baseUrl . '/Goods/' . $id, [], 'GET', false);
     }
 
     public function createClient($params)
@@ -110,7 +115,7 @@ class AqsiApi
         ))->createRequest()
             ->setOptions(
                 [
-           //         CURLOPT_PROXY => 'http://proxy.equifax.local:8090',
+                    //CURLOPT_PROXY => 'http://proxy.equifax.local:8090',
                     CURLOPT_SSL_VERIFYSTATUS => false,
                     CURLOPT_SSL_VERIFYPEER => false
                 ]
