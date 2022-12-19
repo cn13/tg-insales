@@ -120,6 +120,7 @@ class BotController extends \yii\console\Controller
                     $model->barcodes = $good['barcodes'];
                 }
                 if (!$model->save()) {
+                    print_r($model->attributes);
                     print_r($model->getFirstErrors());
                     exit;
                 }
