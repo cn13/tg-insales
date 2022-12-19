@@ -117,7 +117,7 @@ class BotController extends \yii\console\Controller
                         ]
                     );
                 } else {
-                    $model->barcodes = $good['barcodes'];
+                    $model->barcodes = json_encode($good['barcodes']);
                 }
                 try {
                     $model->save();
