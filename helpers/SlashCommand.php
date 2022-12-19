@@ -18,8 +18,8 @@ class SlashCommand
         if (method_exists(self::class, preg_replace('#[^a-zA-Z0-9]#', '', $cmd))) {
             return self::$cmd($m);
         }
-        preg_match('#^\/(setbar)(.+?)$#', $cmd, $out);
-        if ($out[1] === 'setbar' && !empty($out[2])) {
+        preg_match('#^(setbar)(.+?)$#', preg_replace('#[^a-zA-Z0-9]#', '', $cmd), $out);
+        if (isset($out[1], $out[2]) && $out[1] === 'setbar' && !empty($out[2])) {
             return self::setbar($m, $out[2]);
         }
 
