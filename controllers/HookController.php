@@ -6,6 +6,7 @@ use app\helpers\CmdHelper;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\models\Card;
+use app\models\Good;
 use app\models\User;
 use app\service\AqsiApi;
 use yii\db\Transaction;
@@ -138,6 +139,27 @@ class HookController extends Controller
                     );
 
                     \Yii::$app->cache->delete('mail_' . $chatId);
+                }
+
+                //Поиск товара
+                if (\Yii::$app->cache->exists('search_' . $chatId)) {
+                    $models = Good::find()->where(['like', 'name', "%" . trim($this->message['message']['text']) . "%"])
+                        ->limit(50)
+                        ->all();
+                    $message = '';
+                    if (empty($models)) {
+                        $message = 'Ничего не нашли';
+                    } else {
+                        foreach ($models as $model) {
+                            $message .= $model->id . '. ' . $model->name . PHP_EOL;
+                        }
+                    }
+
+                    $sender->sendMessage(
+                        $chatId,
+                        $message
+                    );
+                    \Yii::$app->cache->delete('search_' . $chatId);
                 }
             }
         } catch (\Throwable $e) {

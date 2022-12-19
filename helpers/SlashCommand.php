@@ -14,8 +14,7 @@ class SlashCommand
      */
     public static function run(string $cmd, array $m)
     {
-        $cmd = preg_replace('#[^a-zA-Z0-9]#', '', $cmd);
-        if (method_exists(self::class, $cmd)) {
+        if (method_exists(self::class, preg_replace('#[^a-zA-Z0-9]#', '', $cmd))) {
             return self::$cmd($m);
         }
         return 'Не понял команду!';
@@ -33,6 +32,17 @@ class SlashCommand
     private static function info($message): string
     {
         return 'Выполнили ' . __METHOD__;
+    }
+
+    /**
+     * @param $m
+     * @return string
+     */
+    public static function search($m)
+    {
+        $chatId = $m['chat']['id'] ?? '0000';
+        \Yii::$app->cache->set('search_' . $chatId, true, 300);
+        return "Что ищем?";
     }
 
     /**
