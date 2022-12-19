@@ -8,7 +8,7 @@ class Good extends ActiveRecord
 {
     public static function primaryKey()
     {
-        return 'uniq_id';
+        return ['uniq_id'];
     }
 
     /**
