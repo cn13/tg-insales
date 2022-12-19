@@ -98,9 +98,11 @@ class BotController extends \yii\console\Controller
     {
         $aqsi = (new AqsiApi());
         $i = 0;
-        do {
+        while (true) {
             $i++;
+            echo "page: " . $i . PHP_EOL;
             $result = $aqsi->getGoods(['pageNumber' => $i]);
+            echo 'count: ' . count($result['rows'] ?? []) . PHP_EOL;
             if (empty($result['rows'])) {
                 echo 'stop';
                 break;
@@ -125,10 +127,10 @@ class BotController extends \yii\console\Controller
                     print_r($model->attributes);
                     print_r($model->getFirstErrors());
                     echo $e->getMessage();
-                    exit;
                 }
             }
-        } while (true);
+            usleep(500);
+        }
     }
 
     public function actionSetHook()
