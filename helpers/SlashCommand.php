@@ -3,6 +3,7 @@
 namespace app\helpers;
 
 use app\models\Card;
+use app\models\Good;
 use app\models\User;
 use app\service\AqsiApi;
 
@@ -17,7 +18,20 @@ class SlashCommand
         if (method_exists(self::class, preg_replace('#[^a-zA-Z0-9]#', '', $cmd))) {
             return self::$cmd($m);
         }
+        preg_match('#^\/(setbar)(.+?)$#', $cmd, $out);
+        if ($out[1] === 'setbar' && !empty($out[2])) {
+            return self::setbar($m, $out[2]);
+        }
+
         return 'Не понял команду!';
+    }
+
+    private static function setbar($m, $id)
+    {
+        $chatId = $m['chat']['id'] ?? '0000';
+        \Yii::$app->cache->set('setbar_' . $chatId, $id, 300);
+        $model = Good::find()->where(['id' => $id])->one();
+        return "Введите штрихкод для " . $model->name . " :";
     }
 
     /**

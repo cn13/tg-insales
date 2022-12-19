@@ -14,6 +14,7 @@ class AqsiApi
     private $baseUrl = 'https://api.aqsi.ru/pub/v2';
 
     private $url = [
+        'updateGood' => '/Goods',
         'goods' => '/Goods/list',
         'goodsCategory' => '/GoodsCategory/list',
         'createClient' => '/Clients',
@@ -39,6 +40,11 @@ class AqsiApi
     public function getGood($id)
     {
         return $this->get($this->baseUrl . '/Goods/' . $id, [], 'GET', false);
+    }
+
+    public function updateGood($params)
+    {
+        $this->post('updateGood', $params, 'PUT');
     }
 
     public function createClient($params)
@@ -115,7 +121,7 @@ class AqsiApi
         ))->createRequest()
             ->setOptions(
                 [
-                    //CURLOPT_PROXY => 'http://proxy.equifax.local:8090',
+                   // CURLOPT_PROXY => 'http://proxy.equifax.local:8090',
                     CURLOPT_SSL_VERIFYSTATUS => false,
                     CURLOPT_SSL_VERIFYPEER => false
                 ]

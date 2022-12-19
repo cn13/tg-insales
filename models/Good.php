@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\service\AqsiApi;
 use yii\db\ActiveRecord;
 
 class Good extends ActiveRecord
@@ -28,5 +29,15 @@ class Good extends ActiveRecord
             [['uniq_id', 'name'], 'required'],
             [['barcodes'], 'safe'],
         ];
+    }
+
+    public function setBarcode($barcode)
+    {
+        $aqsi = (new AqsiApi());
+        $good = $aqsi->getGood($this->unid_id);
+        $good['barcodes'] = array_unique(array_merge($good['barcodes'], [$barcode]));
+        $aqsi->updateGood($good);
+        $this->barcodes = json_encode($good['barcodes']);
+        $this->save();
     }
 }

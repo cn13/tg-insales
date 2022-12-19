@@ -165,6 +165,17 @@ class HookController extends Controller
                     );
                     \Yii::$app->cache->delete('search_' . $chatId);
                 }
+
+                if (\Yii::$app->cache->exists('setbar_' . $chatId)) {
+                    $id = \Yii::$app->cache->get('setbar_' . $chatId);
+                    $model = Good::find()->where(['id' => $id])->one();
+                    $model->setBarcode($this->message['message']['text']);
+                    $sender->sendMessage(
+                        $chatId,
+                        'Штрихкод, добавлен!'
+                    );
+                    \Yii::$app->cache->delete('setbar_' . $chatId);
+                }
             }
         } catch (\Throwable $e) {
             file_put_contents(
