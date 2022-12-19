@@ -113,7 +113,7 @@ class BotController extends \yii\console\Controller
                         [
                             'uniq_id' => $good['id'],
                             'name' => $good['name'],
-                            'barcodes' => $good['barcodes'],
+                            'barcodes' => json_encode($good['barcodes']),
                         ]
                     );
                 } else {
