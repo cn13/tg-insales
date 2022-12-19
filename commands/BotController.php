@@ -99,7 +99,6 @@ class BotController extends \yii\console\Controller
         $aqsi = (new AqsiApi());
         $i = 0;
         while (true) {
-            $i++;
             echo "page: " . $i . PHP_EOL;
             $result = $aqsi->getGoods(['pageNumber' => $i]);
             echo 'count: ' . count($result['rows'] ?? []) . PHP_EOL;
@@ -129,7 +128,7 @@ class BotController extends \yii\console\Controller
                     echo $e->getMessage();
                 }
             }
-            usleep(500);
+            $i++;
         }
     }
 
