@@ -34,7 +34,7 @@ class Good extends ActiveRecord
     public function setBarcode($barcode)
     {
         $aqsi = (new AqsiApi());
-        $good = $aqsi->getGood($this->unid_id);
+        $good = $aqsi->getGood($this->uniq_id);
         $good['barcodes'] = array_unique(array_merge($good['barcodes'], [$barcode]));
         $aqsi->updateGood($good);
         $this->barcodes = json_encode($good['barcodes']);
