@@ -35,14 +35,16 @@ class BotController extends \yii\console\Controller
                 $model->setAttribute('group_id', $row['group_id']);
                 $model->setAttribute('group_name', $row['group_name']);
                 $model->save();
-                if (!Group::findOne($row['group_id'])) {
+                if (!Group::find()->where(['id' => $row['group_id']])->exists()) {
                     $modelGroup = new Group(
                         [
                             'id' => $row['group_id'],
                             'name' => $row['group_name'],
                         ]
                     );
-                    $modelGroup->save();
+                    if (!$modelGroup->save()) {
+                        print_r($modelGroup->getFirstErrors());
+                    }
                 }
             }
         }
