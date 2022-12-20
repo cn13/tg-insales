@@ -143,7 +143,7 @@ class HookController extends Controller
 
                 //Поиск товара
                 if (\Yii::$app->cache->exists('search_' . $chatId)) {
-                    $query = Good::find()->where(['deleted' => false]);
+                    $query = Good::find()->where(['deleted' => false])->andWhere(['!=', 'balance', 0]);
                     $res = explode(' ', $this->message['message']['text']);
                     foreach ($res as $s) {
                         $query->andWhere(['like', 'name', trim($s)]);
@@ -155,7 +155,8 @@ class HookController extends Controller
                         $message = 'Ничего не нашли';
                     } else {
                         foreach ($models as $model) {
-                            $message .= '💥 ' . $model->name . PHP_EOL . PHP_EOL;
+                            $s = sprintf('💥 %s (%s шт)', $model->name, $model->balance);
+                            $message .= $s . PHP_EOL . PHP_EOL;
                         }
                     }
 

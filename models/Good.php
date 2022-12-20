@@ -27,7 +27,7 @@ class Good extends ActiveRecord
     {
         return [
             [['uniq_id', 'name', 'deleted'], 'required'],
-            [['barcodes'], 'safe'],
+            [['barcodes', 'price', 'balance'], 'safe'],
         ];
     }
 

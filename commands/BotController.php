@@ -2,13 +2,13 @@
 
 namespace app\commands;
 
+use app\helpers\Balance;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
 use app\models\Card;
 use app\models\Good;
 use app\models\User;
-use app\models\UserShop;
 use app\service\AqsiApi;
 
 /**
@@ -21,6 +21,21 @@ class BotController extends \yii\console\Controller
      */
     private ?string $hook_url;
     private SendCommand $cmd;
+
+    public function actionBalance()
+    {
+        $balance = Balance::getBalance();
+        echo 'Запуск обновления остатков' . PHP_EOL;
+        foreach ($balance as $row) {
+            $model = Good::findOne($row['id']);
+            if ($model) {
+                $model->setAttribute('price', $row['price']);
+                $model->setAttribute('balance', $row['balance']);
+                $model->save();
+            }
+        }
+        echo 'Остатки обновлены' . PHP_EOL;
+    }
 
     public function init()
     {
