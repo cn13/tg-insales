@@ -143,7 +143,7 @@ class HookController extends Controller
 
                 //Поиск товара
                 if (\Yii::$app->cache->exists('search_' . $chatId)) {
-                    $query = Good::find();
+                    $query = Good::find()->where(['deleted' => false]);
                     $res = explode(' ', $this->message['message']['text']);
                     foreach ($res as $s) {
                         $query->andWhere(['like', 'name', trim($s)]);

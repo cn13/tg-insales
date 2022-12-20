@@ -26,7 +26,7 @@ class Good extends ActiveRecord
     public function rules()
     {
         return [
-            [['uniq_id', 'name'], 'required'],
+            [['uniq_id', 'name', 'deleted'], 'required'],
             [['barcodes'], 'safe'],
         ];
     }

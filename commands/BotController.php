@@ -98,6 +98,7 @@ class BotController extends \yii\console\Controller
     {
         $aqsi = (new AqsiApi());
         $i = 0;
+        Good::updateAll(['deleted' => true]);
         while (true) {
             echo "page: " . $i . PHP_EOL;
             $result = $aqsi->getGoods(['pageNumber' => $i]);
@@ -121,6 +122,7 @@ class BotController extends \yii\console\Controller
                     $model->barcodes = json_encode($good['barcodes']);
                 }
                 try {
+                    $model->deleted = false;
                     $model->save();
                 } catch (\Exception $e) {
                     print_r($model->attributes);
