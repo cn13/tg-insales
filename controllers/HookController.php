@@ -7,6 +7,7 @@ use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\models\Card;
 use app\models\Good;
+use app\models\Group;
 use app\models\User;
 use app\service\AqsiApi;
 use yii\db\Transaction;
@@ -155,7 +156,13 @@ class HookController extends Controller
                         $message = 'Ничего не нашли';
                     } else {
                         foreach ($models as $model) {
-                            $s = sprintf('💥 %s (%s шт)', $model->name, $model->balance);
+                            $group = Group::findOne($model->group_id);
+                            if ($group === null) {
+                                $icon = '💥';
+                            } else {
+                                $icon = $group->getIcon();
+                            }
+                            $s = sprintf($icon . ' %s (%s шт)', $model->name, $model->balance);
                             $message .= $s . PHP_EOL . PHP_EOL;
                         }
                     }

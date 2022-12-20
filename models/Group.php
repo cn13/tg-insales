@@ -24,4 +24,13 @@ class Group extends ActiveRecord
             [['icon_chat'], 'safe'],
         ];
     }
+
+    public function getIcon()
+    {
+        switch ($this->icon_chat) {
+            default:
+                $icon = '💥';
+        }
+        return $icon;
+    }
 }
