@@ -20,7 +20,8 @@ class Group extends ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'name', 'icon_chat'], 'required']
+            [['id', 'name'], 'required'],
+            [['icon_chat'], 'safe'],
         ];
     }
 }
