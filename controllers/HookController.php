@@ -155,7 +155,7 @@ class HookController extends Controller
                         $message = 'Ничего не нашли';
                     } else {
                         foreach ($models as $model) {
-                            $message .= $model->id . '. ' . $model->name . PHP_EOL;
+                            $message .= '💥 ' . $model->name . PHP_EOL . PHP_EOL;
                         }
                     }
 
