@@ -28,8 +28,15 @@ class Group extends ActiveRecord
     public function getIcon()
     {
         switch ($this->icon_chat) {
+            case 2:
+                $icon = '⚡';
+                break;
+            case 3:
+                $icon = '💦';
+                break;
             default:
                 $icon = '💥';
+                break;
         }
         return $icon;
     }
