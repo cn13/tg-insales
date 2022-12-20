@@ -34,6 +34,12 @@ class Group extends ActiveRecord
             case 3:
                 $icon = '💦';
                 break;
+            case 4:
+                $icon = '🚬';
+                break;
+            case 5:
+                $icon = '💨';
+                break;
             default:
                 $icon = '💥';
                 break;
