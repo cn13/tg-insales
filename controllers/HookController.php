@@ -149,7 +149,7 @@ class HookController extends Controller
                     foreach ($res as $s) {
                         $query->andWhere(['like', 'name', trim($s)]);
                     }
-                    $models = $query->limit(50)->orderBy(['id' => SORT_ASC])->all();
+                    $models = $query->limit(50)->orderBy(['name' => SORT_ASC])->all();
 
                     $message = '';
                     if (empty($models)) {
