@@ -23,6 +23,8 @@ class Balance
                     'id' => $row['id'],
                     'price' => $row['price'],
                     'balance' => $row['warehousesGoods']['balance'],
+                    'group_id' => $row['group']['id'],
+                    'group_name' => $row['group']['name'],
                 ];
             }
             $page++;
@@ -73,7 +75,13 @@ class Balance
             ->setUrl('https://lk.aqsi.ru/auth')
             ->setFormat(Client::FORMAT_JSON)
             ->addHeaders(['content-type' => 'application/json'])
-            ->setContent('{"emailOrPhone": "cozanostra.me@yandex.ru", "password": "usebet051"}')
+            ->setContent(
+                sprintf(
+                    '{"emailOrPhone": "%s", "password": "%s"}',
+                    \Yii::$app->params['aqsi']['emailOrPhone'],
+                    \Yii::$app->params['aqsi']['password']
+                )
+            )
             ->setMethod('POST')
             ->send();
 

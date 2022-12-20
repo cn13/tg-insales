@@ -8,6 +8,7 @@ use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
 use app\models\Card;
 use app\models\Good;
+use app\models\Group;
 use app\models\User;
 use app\service\AqsiApi;
 
@@ -31,7 +32,18 @@ class BotController extends \yii\console\Controller
             if ($model) {
                 $model->setAttribute('price', $row['price']);
                 $model->setAttribute('balance', $row['balance']);
+                $model->setAttribute('group_id', $row['group_id']);
+                $model->setAttribute('group_name', $row['group_name']);
                 $model->save();
+                if (!Group::findOne($row['group_id'])) {
+                    $modelGroup = new Group(
+                        [
+                            'id' => $row['group_id'],
+                            'name' => $row['group_name'],
+                        ]
+                    );
+                    $modelGroup->save();
+                }
             }
         }
         echo 'Остатки обновлены' . PHP_EOL;
