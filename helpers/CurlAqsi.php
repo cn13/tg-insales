@@ -9,19 +9,7 @@ class CurlAqsi
 {
     public static function get($url)
     {
-        $request = (new Client(
-            [
-                'transport' => CurlTransport::class //только cURL поддерживает нужные нам параметры
-            ]
-        ))->createRequest()
-            ->setOptions(
-                [
-                    CURLOPT_PROXY => 'http://proxy.equifax.local:8090',
-                    CURLOPT_SSL_VERIFYSTATUS => false,
-                    CURLOPT_SSL_VERIFYPEER => false
-                ]
-            );
-        $response = $request
+        $response = self::createRequest()
             ->setUrl($url)
             ->setFormat(Client::FORMAT_JSON)
             ->addHeaders(['content-type' => 'application/json'])
@@ -32,21 +20,9 @@ class CurlAqsi
         return $response;
     }
 
-    public static function auth()
+    private static function auth()
     {
-        $request = (new Client(
-            [
-                'transport' => CurlTransport::class //только cURL поддерживает нужные нам параметры
-            ]
-        ))->createRequest()
-            ->setOptions(
-                [
-                    CURLOPT_PROXY => 'http://proxy.equifax.local:8090',
-                    CURLOPT_SSL_VERIFYSTATUS => false,
-                    CURLOPT_SSL_VERIFYPEER => false
-                ]
-            );
-        $response = $request
+        $response = self::createRequest()
             ->setUrl('https://lk.aqsi.ru/auth')
             ->setFormat(Client::FORMAT_JSON)
             ->addHeaders(['content-type' => 'application/json'])
@@ -61,5 +37,21 @@ class CurlAqsi
             ->send();
 
         return $response->getCookies();
+    }
+
+    private static function createRequest()
+    {
+        return (new Client(
+            [
+                'transport' => CurlTransport::class //только cURL поддерживает нужные нам параметры
+            ]
+        ))->createRequest()
+            ->setOptions(
+                [
+                    //CURLOPT_PROXY => 'http://proxy.equifax.local:8090',
+                    CURLOPT_SSL_VERIFYSTATUS => false,
+                    CURLOPT_SSL_VERIFYPEER => false
+                ]
+            );
     }
 }
