@@ -36,6 +36,8 @@ class BotController extends \yii\console\Controller
                 if (!$model->save()) {
                     print_r($model->getFirstErrors());
                 }
+            } else {
+                echo 'user not found: ' . $id . PHP_EOL;
             }
         }
     }

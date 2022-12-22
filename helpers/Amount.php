@@ -16,8 +16,7 @@ class Amount
                 break;
             }
             foreach ($result['rows'] as $row) {
-                $balance[$row['id']] = [
-                    'id' => $row['id'],
+                $balance[$row['externalId']] = [
                     'amount' => $row['amount'] ?? 0,
                     'receipts_count' => $row['receiptsCount'] ?? 0
                 ];
