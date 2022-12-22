@@ -28,12 +28,14 @@ class BotController extends \yii\console\Controller
     {
         $balance = Amount::getAmount();
         echo 'Запуск обновления сумм и количества покупок' . PHP_EOL;
-        foreach ($balance as $row) {
-            $model = User::find()->where(['user_id' => $row['id']])->one();
+        foreach ($balance as $id => $row) {
+            $model = User::find()->where(['user_id' => $id])->one();
             if ($model) {
                 $model->setAttribute('amount', $row['amount']);
                 $model->setAttribute('receipts_count', $row['receipts_count']);
-                $model->save();
+                if (!$model->save()) {
+                    print_r($model->getFirstErrors());
+                }
             }
         }
     }
