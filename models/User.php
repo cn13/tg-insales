@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
  * @property string $chat_id
  * @property string $name
  * @property string $phone
+ * @property int $account_id
  * @property int $active
  * @property int $receipts_count
  * @property string $amount
@@ -45,6 +46,7 @@ class User extends ActiveRecord
                     'receipts_count',
                     'name',
                     'user_id',
+                    'account_id',
                     'active'
                 ],
                 'safe'

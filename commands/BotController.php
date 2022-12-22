@@ -33,6 +33,7 @@ class BotController extends \yii\console\Controller
             if ($model) {
                 $model->setAttribute('amount', $row['amount']);
                 $model->setAttribute('receipts_count', $row['receipts_count']);
+                $model->setAttribute('account_id', $row['account_id']);
                 if (!$model->save()) {
                     print_r($model->getFirstErrors());
                 }

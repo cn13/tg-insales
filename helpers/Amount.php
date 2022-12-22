@@ -17,6 +17,7 @@ class Amount
             }
             foreach ($result['rows'] as $row) {
                 $balance[$row['externalId']] = [
+                    'account_id' => $row['accountId'],
                     'amount' => $row['amount'] ?? 0,
                     'receipts_count' => $row['receiptsCount'] ?? 0
                 ];
