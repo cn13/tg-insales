@@ -32,7 +32,6 @@ class HookController extends Controller
      */
     public function actionIndex()
     {
-        file_put_contents('../runtime/message_all.json', print_r($this->message, 1), FILE_APPEND);
         try {
             if (empty($this->message['message'])) {
                 file_put_contents('../runtime/message_empty.json', print_r($this->message, 1), FILE_APPEND);

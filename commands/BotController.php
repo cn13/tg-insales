@@ -2,6 +2,7 @@
 
 namespace app\commands;
 
+use app\helpers\Amount;
 use app\helpers\Balance;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
@@ -22,6 +23,20 @@ class BotController extends \yii\console\Controller
      */
     private ?string $hook_url;
     private SendCommand $cmd;
+
+    public function actionAmount()
+    {
+        $balance = Amount::getAmount();
+        echo 'Запуск обновления сумм и количества покупок' . PHP_EOL;
+        foreach ($balance as $row) {
+            $model = User::find()->where(['user_id' => $row['id']])->one();
+            if ($model) {
+                $model->setAttribute('amount', $row['amount']);
+                $model->setAttribute('receipts_count', $row['receipts_count']);
+                $model->save();
+            }
+        }
+    }
 
     public function actionBalance()
     {

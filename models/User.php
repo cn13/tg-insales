@@ -12,6 +12,8 @@ use yii\db\ActiveRecord;
  * @property string $name
  * @property string $phone
  * @property int $active
+ * @property int $receipts_count
+ * @property string $amount
  * @property string $user_id
  * @property string|null $created_at
  * @property string|null $updated_at
@@ -33,7 +35,20 @@ class User extends ActiveRecord
     {
         return [
             [['phone', 'chat_id'], 'required'],
-            [['created_at', 'updated_at', 'phone', 'chat_id', 'name', 'user_id', 'active'], 'safe'],
+            [
+                [
+                    'created_at',
+                    'updated_at',
+                    'phone',
+                    'chat_id',
+                    'amount',
+                    'receipts_count',
+                    'name',
+                    'user_id',
+                    'active'
+                ],
+                'safe'
+            ],
         ];
     }
 

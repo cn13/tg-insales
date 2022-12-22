@@ -93,9 +93,15 @@ class SlashCommand
             return "Ваша карта ожидает активации. Обычно это занимает не больше 1 часа :)";
         }
 
+
         return [
             "photo" => $card->getQrLink(),
-            "caption" => 'Ваша карта лояльности! Скидка ' . (string)$card->value . '%'
+            "caption" => sprintf(
+                "Ваша карта лояльности! \r Скидка %s процентов\r Вы сделали: %s\r На сумму: %s",
+                $card->value,
+                $user->receipts_count ?? 0,
+                $user->amount ?? 0
+            )
         ];
     }
 
