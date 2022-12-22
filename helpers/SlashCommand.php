@@ -97,7 +97,7 @@ class SlashCommand
         return [
             "photo" => $card->getQrLink(),
             "caption" => sprintf(
-                "Ваша карта лояльности! \r Скидка %s процентов\r Вы сделали: %s\r На сумму: %s",
+                "Ваша карта лояльности! \r\n Скидка %s процентов\r\n Вы сделали: %s\r\n На сумму: %s",
                 $card->value,
                 $user->receipts_count ?? 0,
                 $user->amount ?? 0
