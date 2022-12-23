@@ -63,6 +63,15 @@ class SlashCommand
      * @param $m
      * @return string
      */
+    public static function shift($m)
+    {
+        return Shifts::get();
+    }
+
+    /**
+     * @param $m
+     * @return string
+     */
     public static function mail($m)
     {
         $chatId = $m['chat']['id'] ?? '0000';

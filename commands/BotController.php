@@ -24,6 +24,7 @@ class BotController extends \yii\console\Controller
     private ?string $hook_url;
     private SendCommand $cmd;
 
+
     public function actionAmount()
     {
         $balance = Amount::getAmount();
