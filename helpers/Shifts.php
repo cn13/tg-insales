@@ -10,14 +10,16 @@ class Shifts
     {
         date_default_timezone_set('Europe/Moscow');
 
-        $url = "https://lk.aqsi.ru/api/v1/shifts?" . urlencode(
-                http_build_query(
-                    [
-                        'page' => 0,
-                        'pageSize' => 100,
-                        'filtered' => ['beginDate' => date('Y-m-01')]
-                    ]
-                )
+        $beginDate = new DateTime(date('Y-m-01'));
+        $beginDate->modify('-1 day');
+
+        $url = "https://lk.aqsi.ru/api/v1/shifts?" .
+            http_build_query(
+                [
+                    'page' => 0,
+                    'pageSize' => 100,
+                    'filtered' => ['beginDate' => $beginDate->format('Y-m-d') . 'T23:00:00']
+                ]
             );
         $return = [];
         $result = CurlAqsi::get($url)->getData();
@@ -37,12 +39,12 @@ class Shifts
             $value = $start->format('d.m.y H:i') . '/' . $close->format('H:i') . ' ' . $diff->format(
                     '%hч.'
                 );
-            $return[$row['cashierOpened']['name']][] = $value;
+            $return[$row['cashierOpened']['name']][$start->getTimestamp()] = $value;
             $return[$row['cashierOpened']['name']] = array_unique($return[$row['cashierOpened']['name']]);
-            rsort($return[$row['cashierOpened']['name']]);
+            krsort($return[$row['cashierOpened']['name']]);
         }
 
-        ksort($return);
+        //ksort($return);
         $message = '';
         foreach ($return as $user => $rows) {
             $i = 1;

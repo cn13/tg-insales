@@ -5,6 +5,7 @@ namespace app\commands;
 use app\helpers\Amount;
 use app\helpers\Balance;
 use app\helpers\SendCommand;
+use app\helpers\Shifts;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
 use app\models\Card;
@@ -24,6 +25,10 @@ class BotController extends \yii\console\Controller
     private ?string $hook_url;
     private SendCommand $cmd;
 
+    public function actionTest()
+    {
+        echo Shifts::get();
+    }
 
     public function actionAmount()
     {
