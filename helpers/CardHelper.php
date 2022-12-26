@@ -19,7 +19,7 @@ class CardHelper
         $client = CurlAqsi::put($url, json_encode($client))->getData();
     }
 
-    private static function getCardIdFromAqsi($num)
+    public static function getCardIdFromAqsi($num)
     {
         $result = CurlAqsi::get('https://lk.aqsi.ru/api/v1/clients/groups')->getData();
         foreach ($result as $group) {

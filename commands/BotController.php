@@ -4,6 +4,7 @@ namespace app\commands;
 
 use app\helpers\Amount;
 use app\helpers\Balance;
+use app\helpers\CurlAqsi;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
@@ -24,9 +25,10 @@ class BotController extends \yii\console\Controller
     private ?string $hook_url;
     private SendCommand $cmd;
 
+    private static $url = 'https://lk.aqsi.ru/api/v2/clients/{aqsi_id}';
+
     public function actionTest()
     {
-
     }
 
     public function actionAmount()
@@ -96,7 +98,7 @@ class BotController extends \yii\console\Controller
         $sender = (new SendCommand());
         $users = User::find()->all();
         foreach ($users as $user) {
-            $clientAqsi = (new AqsiApi())->getClient($user->user_id);
+            $clientAqsi = CurlAqsi::get(str_replace('{aqsi_id}', $user->aqsi_id, self::$url))->getData();
             $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
             if (!empty($cardNumber) && $user->active == 0) {
                 $user->updateAttributes(['active' => true]);
