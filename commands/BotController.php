@@ -4,7 +4,6 @@ namespace app\commands;
 
 use app\helpers\Amount;
 use app\helpers\Balance;
-use app\helpers\CardHelper;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
@@ -25,10 +24,9 @@ class BotController extends \yii\console\Controller
     private ?string $hook_url;
     private SendCommand $cmd;
 
-    public function actionTest($id)
+    public function actionTest()
     {
-        $user = User::find()->where(['id' => $id])->one();
-        CardHelper::setCard($user);
+
     }
 
     public function actionAmount()

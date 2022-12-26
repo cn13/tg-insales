@@ -27,4 +27,23 @@ class Amount
         }
         return $balance;
     }
+
+    public static function getClient($id)
+    {
+        $page = 0;
+        while (true) {
+            $url = str_replace('{page}', $page, static::$url);
+            $result = CurlAqsi::get($url)->getData();
+            if (empty($result['rows'])) {
+                break;
+            }
+            foreach ($result['rows'] as $row) {
+                if ($row['externalId'] === $id) {
+                    return $row;
+                }
+            }
+            $page++;
+        }
+        return null;
+    }
 }

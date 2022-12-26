@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\helpers\Amount;
 use app\helpers\CardHelper;
 use app\helpers\CmdHelper;
 use app\helpers\SendCommand;
@@ -89,7 +90,7 @@ class HookController extends Controller
                         }
                         $result = (new AqsiApi())->createClient(
                             [
-                                "id" => $user_id,
+                                "id" => md5($user->id),
                                 "gender" => 1,
                                 "comment" => (string)("Карта:" . $card->number . " ID:" . $chatId),
                                 "fio" => (string)$this->message['message']['contact']['first_name'],
@@ -101,11 +102,8 @@ class HookController extends Controller
                             ]
                         );
 
-                        $user->updateAttributes(
-                            [
-                                'aqsi_id' => $result['id']
-                            ]
-                        );
+                        $u = Amount::getClient($result['id']);
+                        $user->updateAttributes(['aqsi_id' => $u['id']]);
                         CardHelper::setCard($user);
 
                         $sender->sendMessage(
@@ -115,9 +113,7 @@ class HookController extends Controller
 
                         $sender->sendMessage(
                             '-1001867486645',
-                            'Новый пользователь!' . PHP_EOL .
-                            $user->name . ' : ' . $user->phone . PHP_EOL .
-                            'Необходимо активировать карту в ЛК: ' . $card->number
+                            'Новый пользователь!' . PHP_EOL . $user->name . ' : ' . $user->phone
                         );
 
                         $tr->commit();
