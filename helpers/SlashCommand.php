@@ -97,7 +97,7 @@ class SlashCommand
 
         $clientAqsi = ClientHelper::get($user->aqsi_id);
         $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
-        if (empty($cardNumber)) {
+        if (empty($cardNumber) && $user->active === 0) {
             return "Ваша карта скоро будет активирована.";
         }
 
