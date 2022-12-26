@@ -49,7 +49,7 @@ class AqsiApi
 
     public function createClient($params)
     {
-        $this->post('createClient', $params);
+        return $this->post('createClient', $params);
     }
 
     public function getClient($id)

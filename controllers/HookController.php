@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\helpers\CardHelper;
 use app\helpers\CmdHelper;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
@@ -55,6 +56,7 @@ class HookController extends Controller
                                 $card = Card::getEmptyCard();
                                 $user->setCard($card);
                                 $card->genQr();
+                                CardHelper::setCard($user);
                             }
                             $sender->sendMessage(
                                 $user->chat_id,
@@ -85,7 +87,7 @@ class HookController extends Controller
                         if (strlen($phone) > 11) {
                             $phone = '';
                         }
-                        (new AqsiApi())->createClient(
+                        $result = (new AqsiApi())->createClient(
                             [
                                 "id" => $user_id,
                                 "gender" => 1,
@@ -98,6 +100,14 @@ class HookController extends Controller
                                 "mainPhone" => $phone
                             ]
                         );
+
+                        $user->updateAttributes(
+                            [
+                                'aqsi_id' => $result['id'],
+                                'account_id' => $result['externalId'],
+                            ]
+                        );
+                        CardHelper::setCard($user);
 
                         $sender->sendMessage(
                             $chatId,

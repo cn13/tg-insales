@@ -99,7 +99,7 @@ class SlashCommand
         $clientAqsi = (new AqsiApi())->getClient($user->user_id);
         $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
         if (empty($cardNumber)) {
-            return "Ваша карта ожидает активации. Обычно это занимает не больше 1 часа :)";
+            return "Ваша карта скоро будет активирована.";
         }
 
 

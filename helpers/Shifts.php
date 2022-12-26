@@ -36,9 +36,15 @@ class Shifts
             if ($hour <= 1) {
                 continue;
             }
-            $value = $start->format('d.m.y H:i') . '/' . $close->format('H:i') . ' ' . $diff->format(
-                    '%hч.'
-                );
+
+            $hours = (int)$diff->format('%h');
+            $minutes = (int)$diff->format('%i');
+            if ($minutes > 35) {
+                $hours++;
+            }
+
+            $value = $start->format('d.m.y H:i') . '/' . $close->format('H:i') . ' ' . $hours . 'ч.';
+
             $return[$row['cashierOpened']['name']][$start->getTimestamp()] = $value;
             $return[$row['cashierOpened']['name']] = array_unique($return[$row['cashierOpened']['name']]);
             krsort($return[$row['cashierOpened']['name']]);
@@ -53,7 +59,7 @@ class Shifts
                 $message .= "-$i- " . $row . PHP_EOL;
                 $i++;
             }
-            $message .= '=============================' . PHP_EOL;
+            $message .= '==========================================' . PHP_EOL;
         }
 
         return $message;

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\CardHelper;
 use yii\db\ActiveRecord;
 
 /**
@@ -16,6 +17,7 @@ use yii\db\ActiveRecord;
  * @property int $receipts_count
  * @property string $amount
  * @property string $user_id
+ * @property string $aqsi_id
  * @property string|null $created_at
  * @property string|null $updated_at
  */
@@ -47,6 +49,7 @@ class User extends ActiveRecord
                     'name',
                     'user_id',
                     'account_id',
+                    'aqsi_id',
                     'active'
                 ],
                 'safe'

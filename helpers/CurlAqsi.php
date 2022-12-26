@@ -20,6 +20,20 @@ class CurlAqsi
         return $response;
     }
 
+    public static function put($url, string $content)
+    {
+        $response = self::createRequest()
+            ->setUrl($url)
+            ->setFormat(Client::FORMAT_JSON)
+            ->addHeaders(['content-type' => 'application/json'])
+            ->setMethod('PUT')
+            ->setContent($content)
+            ->setCookies(self::auth())
+            ->send();
+
+        return $response;
+    }
+
     private static function auth()
     {
         $response = self::createRequest()

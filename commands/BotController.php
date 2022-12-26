@@ -4,8 +4,8 @@ namespace app\commands;
 
 use app\helpers\Amount;
 use app\helpers\Balance;
+use app\helpers\CardHelper;
 use app\helpers\SendCommand;
-use app\helpers\Shifts;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
 use app\models\Card;
@@ -25,9 +25,10 @@ class BotController extends \yii\console\Controller
     private ?string $hook_url;
     private SendCommand $cmd;
 
-    public function actionTest()
+    public function actionTest($id)
     {
-        echo Shifts::get();
+        $user = User::find()->where(['id' => $id])->one();
+        CardHelper::setCard($user);
     }
 
     public function actionAmount()
@@ -40,6 +41,7 @@ class BotController extends \yii\console\Controller
                 $model->setAttribute('amount', $row['amount']);
                 $model->setAttribute('receipts_count', $row['receipts_count']);
                 $model->setAttribute('account_id', $row['account_id']);
+                $model->setAttribute('aqsi_id', $row['aqsi_id']);
                 if (!$model->save()) {
                     print_r($model->getFirstErrors());
                 }
