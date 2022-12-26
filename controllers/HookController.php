@@ -66,7 +66,7 @@ class HookController extends Controller
                             return;
                         }
 
-                        $user_id = md5('tr_!' . $chatId . $this->message['message']['contact']['phone_number']);
+                        $user_id = md5('tr__' . $chatId . $this->message['message']['contact']['phone_number']);
 
                         $user = new User(
                             [
