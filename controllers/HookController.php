@@ -101,6 +101,7 @@ class HookController extends Controller
                             ]
                         );
 
+                        throw new \Exception(print_r($result, 1));
                         $user->updateAttributes(
                             [
                                 'aqsi_id' => $result['id'],
