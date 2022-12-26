@@ -101,11 +101,9 @@ class HookController extends Controller
                             ]
                         );
 
-                        throw new \Exception(print_r($result, 1));
                         $user->updateAttributes(
                             [
-                                'aqsi_id' => $result['id'],
-                                'account_id' => $result['externalId'],
+                                'aqsi_id' => $result['id']
                             ]
                         );
                         CardHelper::setCard($user);
