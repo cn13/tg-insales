@@ -4,6 +4,8 @@ namespace app\commands;
 
 use app\helpers\Amount;
 use app\helpers\Balance;
+use app\helpers\CardHelper;
+use app\helpers\ClientHelper;
 use app\helpers\CurlAqsi;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
@@ -29,6 +31,19 @@ class BotController extends \yii\console\Controller
 
     public function actionTest()
     {
+        $aqsi_id = 'a785b3cb-8465-4b85-8e6c-8e15ffeb7ad1';
+        $number = '202200000023';
+        $url = str_replace('{aqsi_id}', 'https://lk.aqsi.ru/api/v2/clients/{aqsi_id}', self::$url);
+        $client = CurlAqsi::get($url)->getData();
+        unset($client['group']);
+        //unset($client['loyaltyCard']);
+        unset($client['age']);
+        $client['loyaltyCard'] = CardHelper::getCardIdFromAqsi($number);
+        $client['loyaltyCardId'] = $client['loyaltyCard']['id'];
+        $client = CurlAqsi::put($url, json_encode($client))->getData();
+        print_r($client);
+        $clientAqsi = (new AqsiApi())->getClient('a0aaf54d7023407e342850bcf2d78d7a');
+        print_r($clientAqsi);
     }
 
     public function actionAmount()
@@ -98,7 +113,7 @@ class BotController extends \yii\console\Controller
         $sender = (new SendCommand());
         $users = User::find()->all();
         foreach ($users as $user) {
-            $clientAqsi = CurlAqsi::get(str_replace('{aqsi_id}', $user->aqsi_id, self::$url))->getData();
+            $clientAqsi = ClientHelper::get($user->aqsi_id);
             $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
             if (!empty($cardNumber) && $user->active == 0) {
                 $user->updateAttributes(['active' => true]);

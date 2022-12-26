@@ -5,7 +5,6 @@ namespace app\helpers;
 use app\models\Card;
 use app\models\Good;
 use app\models\User;
-use app\service\AqsiApi;
 
 class SlashCommand
 {
@@ -40,7 +39,7 @@ class SlashCommand
      */
     private static function start($message): string
     {
-        return 'Привет! Нажми на меню внизу, и получи свою карту лояльности! Скидка 5 процентов, будет увеличиваться, от количества заказов. Условия мы озвучим позже :)';
+        return 'Привет! Нажми на меню внизу, и получи свою карту лояльности! Скидка 5 процентов, будет увеличиваться, от суммы заказов.';
     }
 
     private static function info($message): string
@@ -96,7 +95,7 @@ class SlashCommand
             return "Вам необходимо выпустить карту";
         }
 
-        $clientAqsi = (new AqsiApi())->getClient($user->user_id);
+        $clientAqsi = ClientHelper::get($user->aqsi_id);
         $cardNumber = $clientAqsi['loyaltyCard']['number'] ?? null;
         if (empty($cardNumber)) {
             return "Ваша карта скоро будет активирована.";
