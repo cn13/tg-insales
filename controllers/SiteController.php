@@ -8,6 +8,6 @@ class SiteController extends Controller
 {
     public function actionIndex()
     {
-        return 'SmokeLife API';
+        return $this->render('index');
     }
 }

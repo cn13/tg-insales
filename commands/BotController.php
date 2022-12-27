@@ -4,13 +4,12 @@ namespace app\commands;
 
 use app\helpers\Amount;
 use app\helpers\Balance;
-use app\helpers\CardHelper;
 use app\helpers\ClientHelper;
-use app\helpers\CurlAqsi;
 use app\helpers\SendCommand;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
 use app\models\Card;
+use app\models\Category;
 use app\models\Good;
 use app\models\Group;
 use app\models\User;
@@ -31,19 +30,16 @@ class BotController extends \yii\console\Controller
 
     public function actionTest()
     {
-        $aqsi_id = 'a785b3cb-8465-4b85-8e6c-8e15ffeb7ad1';
-        $number = '202200000023';
-        $url = str_replace('{aqsi_id}', 'https://lk.aqsi.ru/api/v2/clients/{aqsi_id}', self::$url);
-        $client = CurlAqsi::get($url)->getData();
-        unset($client['group']);
-        //unset($client['loyaltyCard']);
-        unset($client['age']);
-        $client['loyaltyCard'] = CardHelper::getCardIdFromAqsi($number);
-        $client['loyaltyCardId'] = $client['loyaltyCard']['id'];
-        $client = CurlAqsi::put($url, json_encode($client))->getData();
-        print_r($client);
-        $clientAqsi = (new AqsiApi())->getClient('a0aaf54d7023407e342850bcf2d78d7a');
-        print_r($clientAqsi);
+        $category = Category::all();
+        foreach ($category as $cat) {
+            print_r(
+                [
+                    'name' => $cat->name,
+                    'issetChild' => $cat->issetChild(),
+                    'countGoods' => count($cat->getGoods()),
+                ]
+            );
+        }
     }
 
     public function actionAmount()

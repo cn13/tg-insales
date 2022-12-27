@@ -27,6 +27,12 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/chillerlan/php-qrcode" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/chillerlan/php-settings-container" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/telegram-bot/api" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/yiisoft/yii2-bootstrap" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/yiister/yii2-gentelella" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/bower-asset/gentelella" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/bower-asset/bootstrap" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/fortawesome/font-awesome" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/rmrevin/yii2-fontawesome" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

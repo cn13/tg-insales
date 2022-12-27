@@ -39,7 +39,13 @@ class AqsiApi
 
     public function getGood($id)
     {
-        return $this->get($this->baseUrl . '/Goods/' . $id, [], 'GET', false);
+        $key = 'good_' . $id;
+        if (\Yii::$app->cache->exists($key)) {
+            return \Yii::$app->cache->get($key);
+        }
+        $result = $this->get($this->baseUrl . '/Goods/' . $id, [], 'GET', false);
+        \Yii::$app->cache->set($key, $result, 300);
+        return $result;
     }
 
     public function updateGood($params)
@@ -121,7 +127,7 @@ class AqsiApi
         ))->createRequest()
             ->setOptions(
                 [
-                   // CURLOPT_PROXY => 'http://proxy.equifax.local:8090',
+                    // CURLOPT_PROXY => 'http://proxy.equifax.local:8090',
                     CURLOPT_SSL_VERIFYSTATUS => false,
                     CURLOPT_SSL_VERIFYPEER => false
                 ]
