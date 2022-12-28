@@ -36,8 +36,9 @@ class Category extends ModelAqsi
         }
         if ($model->issetChild()) {
             foreach ($model->getChildrens() as $child) {
-                if ($child->id === $id) {
-                    return $child;
+                $find = self::find($child, $id);
+                if ($find) {
+                    return $find;
                 }
             }
         }
