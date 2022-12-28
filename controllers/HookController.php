@@ -71,8 +71,8 @@ class HookController extends Controller
 
                         $user = new User(
                             [
-                                'phone' => $this->message['message']['contact']['phone_number'],
-                                'name' => $this->message['message']['contact']['first_name'] ?? '',
+                                'phone'   => $this->message['message']['contact']['phone_number'],
+                                'name'    => $this->message['message']['contact']['first_name'] ?? '',
                                 'chat_id' => (string)$chatId,
                                 'user_id' => $user_id
                             ]
@@ -90,11 +90,11 @@ class HookController extends Controller
                         }
                         $result = (new AqsiApi())->createClient(
                             [
-                                "id" => md5($user->id),
-                                "gender" => 1,
-                                "comment" => (string)("Карта:" . $card->number . " ID:" . $chatId),
-                                "fio" => (string)$this->message['message']['contact']['first_name'],
-                                "group" => [
+                                "id"        => md5($user->id),
+                                "gender"    => 1,
+                                "comment"   => (string)("Карта:" . $card->number . " ID:" . $chatId),
+                                "fio"       => (string)$this->message['message']['contact']['first_name'],
+                                "group"     => [
                                     "id" => "dfb6ca32-48b2-4889-98a8-6cebb2ca17cf"
                                 ],
                                 "birthDate" => date('Y-m-d', strtotime('now -20 year')),
@@ -134,7 +134,8 @@ class HookController extends Controller
 
                     $sender->sendMessage(
                         '-1001867486645',
-                        $userName . ':' . PHP_EOL .
+                        '<a href="tg://user?id=' . $chatId . '">' . $userName . '</a> :'
+                        . PHP_EOL .
                         $this->message['message']['text']
                     );
 
