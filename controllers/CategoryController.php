@@ -11,7 +11,9 @@ class CategoryController extends \yii\web\Controller
     public function actionIndex($id)
     {
         $category = Category::one($id);
-        $this->view->title = $category->name;
+        if ($category) {
+            $this->view->title = $category->name ?? '';
+        }
         $goods = GoodSite::all(['group_id' => $id]);
         return $this->render('view', ['goods' => $goods]);
     }
