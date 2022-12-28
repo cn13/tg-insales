@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var string $content
+ * @var string        $content
  * @var \yii\web\View $this
  */
 
@@ -70,7 +70,7 @@ $this->beginBody(); ?>
                         foreach ($category as $cat) {
                             $item = [
                                 "label" => $cat->name,
-                                "icon" => "folder"
+                                "icon"  => "folder"
                             ];
 
                             if ($cat->issetChild()) {
@@ -78,16 +78,16 @@ $this->beginBody(); ?>
                                 foreach ($cat->getChildrens() as $child) {
                                     $itemChild = [
                                         "label" => $child->name,
-                                        "url" => '/index.php?r=category&id=' . $child->id,
-                                        "icon" => "folder"
+                                        "url"   => \yii\helpers\Url::to(['/category', 'id' => $child->id]),
+                                        "icon"  => "folder"
                                     ];
                                     if ($child->issetChild()) {
                                         $itemChild['url'] = '#';
                                         foreach ($child->getChildrens() as $child1) {
                                             $itemChild['items'][] = [
                                                 "label" => $child1->name,
-                                                "url" => '/index.php?r=category&id=' . $child1->id,
-                                                "icon" => "folder"
+                                                "url"   => \yii\helpers\Url::to(['/category', 'id' => $child1->id]),
+                                                "icon"  => "folder"
                                             ];
                                         }
                                     }
