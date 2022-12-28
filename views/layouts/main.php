@@ -78,7 +78,7 @@ $this->beginBody(); ?>
                                 foreach ($cat->getChildrens() as $child) {
                                     $itemChild = [
                                         "label" => $child->name,
-                                        "url"   => \yii\helpers\Url::to(['/category/' . $child->id]),
+                                        "url"   => \yii\helpers\Url::to(['/category/', 'id' => $child->id]),
                                         "icon"  => "folder"
                                     ];
                                     if ($child->issetChild()) {
@@ -86,7 +86,7 @@ $this->beginBody(); ?>
                                         foreach ($child->getChildrens() as $child1) {
                                             $itemChild['items'][] = [
                                                 "label" => $child1->name,
-                                                "url"   => \yii\helpers\Url::to(['/category/' . $child1->id]),
+                                                "url"   => \yii\helpers\Url::to(['/category/', 'id' => $child1->id]),
                                                 "icon"  => "folder"
                                             ];
                                         }
@@ -107,7 +107,8 @@ $this->beginBody(); ?>
                         ) .
                         \yiister\gentelella\widgets\Menu::widget(
                             [
-                                "items" => $menuCategory,
+                                "items"           => $menuCategory,
+                                "activateParents" => false
                             ]
                         )
                         ?>
