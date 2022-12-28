@@ -5,15 +5,43 @@ namespace app\models;
 use app\service\AqsiApi;
 
 /**
- *
  * @property-read array|mixed $children
- * @property-read array $goods
+ * @property-read array       $goods
  */
 class Category extends ModelAqsi
 {
     protected static function getAllModel($params = []): array
     {
         return (new AqsiApi())->getGoodsCategory();
+    }
+
+    /**
+     * @return array
+     */
+    public static function one($id)
+    {
+        foreach (self::all() as $key => $model) {
+            $find = self::find($model, $id);
+            if ($find) {
+                return $find;
+            }
+        }
+        return null;
+    }
+
+    private static function find($model, $id)
+    {
+        if ($model->id === $id) {
+            return $model;
+        }
+        if ($model->issetChild()) {
+            foreach ($model->getChildrens() as $child) {
+                if ($child->id === $id) {
+                    return $child;
+                }
+            }
+        }
+        return null;
     }
 
     /**

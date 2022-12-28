@@ -42,7 +42,12 @@ $this->beginBody(); ?>
             <div class="left_col scroll-view">
 
                 <div class="navbar nav_title" style="border: 0;">
-                    <a href="/" class="site_title"><span><?= Yii::$app->name ?></span></a>
+                    <a href="/" class="site_title">
+                        <i class="fa">
+                            SL
+                        </i>
+                        <span><?= Yii::$app->name ?></span>
+                    </a>
                 </div>
                 <div class="clearfix"></div>
                 <br/>
@@ -133,30 +138,16 @@ $this->beginBody(); ?>
                     </div>
 
                     <ul class="nav navbar-nav navbar-right">
-                        <!--li class="">
+
+                        <li class="">
                             <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
                                aria-expanded="false">
-                                <img src="http://placehold.it/128x128" alt="">John Doe
-                                <span class=" fa fa-angle-down"></span>
+                                <?= $this->title ?>
+                                <span class="fa fa-arrow-circle-left"></span>
                             </a>
-                            <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                <li><a href="javascript:;"> Profile</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;">
-                                        <span class="badge bg-red pull-right">50%</span>
-                                        <span>Settings</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;">Help</a>
-                                </li>
-                                <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
-                                </li>
-                            </ul>
                         </li>
 
-                        <li role="presentation" class="dropdown">
+                        <!--li role="presentation" class="dropdown">
                             <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown"
                                aria-expanded="false">
                                 <i class="fa fa-envelope-o"></i>
