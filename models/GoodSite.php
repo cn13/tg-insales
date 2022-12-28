@@ -28,7 +28,15 @@ class GoodSite extends ModelAqsi
     {
         $return = [];
         foreach (static::getAllModel($params) as $model) {
-            $return[] = new static($model);
+            $goodModelDb = Good::findOne($model['id']);
+
+            $goodModel = new static(
+                array_merge($model, [
+                    'balance' => $goodModelDb->balance ?? 0,
+                    'price'   => $goodModelDb->price ?? 0,
+                ])
+            );
+            $return[] = $goodModel;
         }
         return $return;
     }

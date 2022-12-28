@@ -45,6 +45,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'category/<id:[0-9a-zA-Z\-]+>' => 'category/index'
             ],
         ],*/
     ],

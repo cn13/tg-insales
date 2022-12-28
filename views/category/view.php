@@ -1,3 +1,12 @@
+<style>
+    .fa-check {
+        color: lightgreen !important;
+    }
+
+    .fa-close {
+        color: red !important;
+    }
+</style>
 <table class="table table-hover">
     <thead>
     <tr>
@@ -10,12 +19,13 @@
     <tbody>
     <?php
     /** @var \app\models\GoodSite[] $good */
-    $i=1;foreach ($goods as $good): ?>
+    $i = 1;
+    foreach ($goods as $good): ?>
         <tr>
-            <th scope="row"><?=$i++?></th>
+            <th scope="row"><?= $i++ ?></th>
             <td><?= $good->name ?></td>
-            <td>0</td>
-            <td>0 руб</td>
+            <td><i class="cust fa fa-<?= $good->balance > 0 ? "check" : "close" ?>"></i></td>
+            <td><?= $good->price ?> руб</td>
         </tr>
     <?php
     endforeach; ?>
