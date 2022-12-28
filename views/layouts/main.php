@@ -20,8 +20,9 @@ $this->beginPage(); ?>
     <meta charset="<?= Yii::$app->charset ?>"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="icon" type="image/icon" href="/favicon.ico"/>
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?= Html::encode($this->title ?? '') ?> SmokeLife.RU</title>
     <?php
     $this->head() ?>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -44,24 +45,10 @@ $this->beginBody(); ?>
                     <a href="/" class="site_title"><span><?= Yii::$app->name ?></span></a>
                 </div>
                 <div class="clearfix"></div>
-
-                <!-- menu prile quick info
-                <div class="profile">
-                    <div class="profile_pic">
-                        <img src="http://placehold.it/128x128" alt="..." class="img-circle profile_img">
-                    </div>
-                    <div class="profile_info">
-                        <span>Welcome,</span>
-                        <h2>John Doe</h2>
-                    </div>
-                </div>
-                 /menu prile quick info -->
-
                 <br/>
 
                 <!-- sidebar menu -->
                 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-
                     <div class="menu_section">
                         <h3>Категории</h3>
                         <?php
@@ -117,7 +104,7 @@ $this->beginBody(); ?>
                 </div>
                 <!-- /sidebar menu -->
 
-                <!-- /menu footer buttons -->
+                <!-- /menu footer buttons >
                 <div class="sidebar-footer hidden-small">
                     <a data-toggle="tooltip" data-placement="top" title="Settings">
                         <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
@@ -132,7 +119,7 @@ $this->beginBody(); ?>
                         <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                     </a>
                 </div>
-                <!-- /menu footer buttons -->
+                /menu footer buttons -->
             </div>
         </div>
 
