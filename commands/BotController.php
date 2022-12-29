@@ -6,6 +6,7 @@ use app\helpers\Amount;
 use app\helpers\Balance;
 use app\helpers\ClientHelper;
 use app\helpers\SendCommand;
+use app\helpers\Shifts;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
 use app\models\Card;
@@ -30,16 +31,7 @@ class BotController extends \yii\console\Controller
 
     public function actionTest()
     {
-        $category = Category::all();
-        foreach ($category as $cat) {
-            print_r(
-                [
-                    'name' => $cat->name,
-                    'issetChild' => $cat->issetChild(),
-                    'countGoods' => count($cat->getGoods()),
-                ]
-            );
-        }
+        echo Shifts::get();
     }
 
     public function actionAmount()

@@ -36,7 +36,7 @@ class Shifts
             if ($hour <= 1) {
                 continue;
             }
-
+            $cName = $row['cashierOpened']['name'] ?? 'DeletedUser';
             $hours = (int)$diff->format('%h');
             $minutes = (int)$diff->format('%i');
             if ($minutes > 35) {
@@ -45,9 +45,9 @@ class Shifts
 
             $value = $start->format('d.m.y H:i') . '/' . $close->format('H:i') . ' ' . $hours . 'ч.';
 
-            $return[$row['cashierOpened']['name']][$start->getTimestamp()] = $value;
-            $return[$row['cashierOpened']['name']] = array_unique($return[$row['cashierOpened']['name']]);
-            krsort($return[$row['cashierOpened']['name']]);
+            $return[$cName][$start->getTimestamp()] = $value;
+            $return[$cName] = array_unique($return[$cName]);
+            krsort($return[$cName]);
         }
 
         //ksort($return);
