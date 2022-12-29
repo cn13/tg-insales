@@ -46,7 +46,7 @@ class Good extends ActiveRecord
      */
     public function getImage(): string
     {
-        $fileDir = __DIR__ . '/../images/';
+        $fileDir = __DIR__ . '/../../smokelife.ru/images/';
         $fileName = 'item_' . $this->id . '.jpg';
         if (!file_exists($fileDir)) {
             if (!mkdir($fileDir) && !is_dir($fileDir)) {
