@@ -48,7 +48,7 @@ class Good extends ActiveRecord
     {
         $fileDir = __DIR__ . '/../images/';
         $fileName = 'item_' . $this->id . '.jpg';
-        if (!is_dir($fileDir)) {
+        if (!file_exists($fileDir)) {
             if (!mkdir($fileDir) && !is_dir($fileDir)) {
                 throw new \RuntimeException(sprintf('Directory "%s" was not created', $fileDir));
             }

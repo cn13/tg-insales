@@ -20,8 +20,13 @@
     }
 
     }
+
+    .img-thumbnail {
+        max-width: 100px !important;
+        max-height: 100px !important;
+    }
 </style>
-<table class="table table-hover">
+<table class="table table-hover table-image">
     <thead>
     <tr>
         <th>#</th>
@@ -41,7 +46,7 @@
                 <img src="/images/<?= $good->getImage() ?>" class="img-fluid img-thumbnail" alt="Sheep">
             </td>
             <td><?= $good->name ?></td>
-            <td><i class="cust fa fa-<?= $good->balance > 0 ? "check" : "close" ?>"></i></td>
+            <td><i class="fa fa-<?= $good->balance > 0 ? "check" : "close" ?>"></i></td>
             <td><?= $good->price ?> руб</td>
         </tr>
     <?php
