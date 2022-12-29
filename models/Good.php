@@ -40,4 +40,25 @@ class Good extends ActiveRecord
         $this->barcodes = json_encode($good['barcodes']);
         $this->save();
     }
+
+    /**
+     * @return string
+     */
+    public function getImage(): string
+    {
+        $fileDir = __DIR__ . '/../images/';
+        $fileName = 'item_' . $this->id . '.jpg';
+        if (!mkdir($fileDir) && !is_dir($fileDir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $fileDir));
+        }
+        if (!file_exists($fileDir . $fileName)) {
+            $good = (new AqsiApi())->getGood($this->uniq_id);
+            if (isset($good['img']['data'])) {
+                file_put_contents($good['img']['data'], $fileDir . $fileName);
+            } else {
+                return 'default.jpg';
+            }
+        }
+        return $fileName;
+    }
 }

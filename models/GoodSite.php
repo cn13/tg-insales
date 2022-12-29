@@ -33,7 +33,7 @@ class GoodSite extends ModelAqsi
             $goodModel = new static(
                 array_merge($model, [
                     'balance' => $goodModelDb->balance ?? 0,
-                    'price'   => $goodModelDb->price ?? 0,
+                    'price' => $goodModelDb->price ?? 0,
                 ])
             );
             $return[] = $goodModel;

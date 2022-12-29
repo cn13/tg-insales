@@ -12,6 +12,7 @@ use app\helpers\ViewHelper;
 use app\models\Card;
 use app\models\Category;
 use app\models\Good;
+use app\models\GoodSite;
 use app\models\Group;
 use app\models\User;
 use app\service\AqsiApi;
@@ -31,7 +32,7 @@ class BotController extends \yii\console\Controller
 
     public function actionTest()
     {
-        echo Shifts::get();
+
     }
 
     public function actionAmount()
