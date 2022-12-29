@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\models\Category;
-use app\models\GoodSite;
+use app\models\Good;
 
 class CategoryController extends \yii\web\Controller
 {
@@ -14,7 +14,7 @@ class CategoryController extends \yii\web\Controller
         if ($category) {
             $this->view->title = ($category->name ?? '') . ' - ';
         }
-        $goods = GoodSite::all(['group_id' => $id]);
+        $goods = Good::find()->where(['group_id' => $id])->all();
         return $this->render('view', ['goods' => $goods]);
     }
 }

@@ -18,7 +18,7 @@
     </thead>
     <tbody>
     <?php
-    /** @var \app\models\GoodSite[] $good */
+    /** @var \app\models\Good[] $good */
     $i = 1;
     foreach ($goods as $good): ?>
         <tr>
