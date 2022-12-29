@@ -7,7 +7,6 @@ use app\models\Good;
 
 class CategoryController extends \yii\web\Controller
 {
-
     public function actionIndex($id)
     {
         $category = Category::one($id);

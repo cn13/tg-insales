@@ -23,7 +23,9 @@
 
     .img-thumbnail {
         max-width: 100px !important;
+        min-width: 100px !important;
         max-height: 100px !important;
+        min-height: 100px !important;
     }
 </style>
 <table class="table table-hover table-image">
