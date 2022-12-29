@@ -58,8 +58,9 @@ class Good extends ActiveRecord
             if (isset($good['img']['data'])) {
                 file_put_contents(
                     $fileDir . $fileName,
-                    str_replace('data:image/jpeg;base64,', '', $good['img']['data'])
+                    str_replace('data:image/jpeg;base64,', '', base64_decode($good['img']['data']))
                 );
+                chmod($fileDir . $fileName, '775');
             } else {
                 return 'default.jpg';
             }
