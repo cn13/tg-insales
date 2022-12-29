@@ -61,7 +61,7 @@ class Good extends ActiveRecord
                     $fileDir . $fileName,
                     $data
                 );
-                chmod($fileDir . $fileName, 7777);
+                chmod($fileDir . $fileName, 0777);
             } else {
                 return 'default.jpg';
             }
