@@ -43,7 +43,22 @@
         <tr>
             <th scope="row"><?= $i++ ?></th>
             <td class="w-25">
-                <img src="/images/<?= $good->getImage() ?>" class="img-fluid img-thumbnail" alt="Sheep">
+                <?php
+                echo \branchonline\lightbox\Lightbox::widget(
+                    [
+                        'files' => [
+                            [
+                                'thumb' => '/images/' . $good->getImage(),
+                                'original' => '/images/' . $good->getImage(),
+                                'title' => $good->name,
+                                'thumbOptions' => [
+                                    'class' => 'img-fluid img-thumbnail'
+                                ]
+                            ],
+                        ]
+                    ]
+                );
+                ?>
             </td>
             <td><?= $good->name ?></td>
             <td><i class="fa fa-<?= $good->balance > 0 ? "check" : "close" ?>"></i></td>

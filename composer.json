@@ -23,7 +23,8 @@
         "ext-json": "*",
         "chillerlan/php-qrcode": "^4.3",
         "ext-curl": "*",
-        "telegram-bot/api": "^2.3"
+        "telegram-bot/api": "^2.3",
+        "branchonline/yii2-lightbox": "*"
     },
     "config": {
         "process-timeout": 1800,
