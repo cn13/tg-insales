@@ -56,9 +56,10 @@ class Good extends ActiveRecord
         if (!file_exists($fileDir . $fileName)) {
             $good = (new AqsiApi())->getGood($this->uniq_id);
             if (isset($good['img']['data'])) {
+                $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $good['img']['data']));
                 file_put_contents(
                     $fileDir . $fileName,
-                    str_replace('data:image/jpeg;base64,', '', base64_decode($good['img']['data']))
+                    $data
                 );
                 chmod($fileDir . $fileName, '775');
             } else {
