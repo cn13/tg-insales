@@ -48,8 +48,10 @@ class Good extends ActiveRecord
     {
         $fileDir = __DIR__ . '/../images/';
         $fileName = 'item_' . $this->id . '.jpg';
-        if (!mkdir($fileDir) && !is_dir($fileDir)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $fileDir));
+        if (!is_dir($fileDir)) {
+            if (!mkdir($fileDir) && !is_dir($fileDir)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $fileDir));
+            }
         }
         if (!file_exists($fileDir . $fileName)) {
             $good = (new AqsiApi())->getGood($this->uniq_id);
