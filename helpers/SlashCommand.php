@@ -34,12 +34,12 @@ class SlashCommand
     }
 
     /**
-     * @return string
-     * @see
+     * @param $message
+     * @return array
      */
-    private static function start($message): string
+    private static function start($message): array
     {
-        return 'Привет! Нажми на меню внизу, и получи свою карту лояльности! Скидка 5 процентов, будет увеличиваться, от суммы заказов.';
+        return self::newcard($message);
     }
 
     private static function info($message): string
@@ -101,9 +101,8 @@ class SlashCommand
             return "Ваша карта скоро будет активирована.";
         }
 
-
         return [
-            "photo" => $card->getQrLink(),
+            "photo"   => $card->getQrLink(),
             "caption" => sprintf(
                 "Ваша карта лояльности!  Скидка %s%%\r\n\r\nВы сделали покупок на сумму: %s руб.\r\n\r\n от 0 руб. - 5%% \r\n от 7000 руб. - 7%% \r\n от 15000 руб. - 10%%",
                 $card->value,
@@ -118,16 +117,16 @@ class SlashCommand
     private static function newcard($message)
     {
         $keyboard = [
-            'keyboard' => [
+            'keyboard'          => [
                 [
                     [
-                        "text" => "Отправить номер телефона",
+                        "text"            => "Отправить номер телефона",
                         "request_contact" => true
                     ]
                 ]
             ],
             "one_time_keyboard" => true,
-            "resize_keyboard" => true
+            "resize_keyboard"   => true
         ];
         return ['reply_markup' => json_encode($keyboard)];
     }
