@@ -32,7 +32,7 @@ class BotController extends \yii\console\Controller
 
     public function actionTest()
     {
-
+        print_r(Shifts::get());
     }
 
     public function actionAmount()

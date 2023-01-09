@@ -43,24 +43,45 @@ class Shifts
                 $hours++;
             }
 
-            $value = $start->format('d.m.y H:i') . '/' . $close->format('H:i') . ' ' . $hours . 'ч.';
+            $sum = 0;
+            foreach ($row['calculatedCounters'] as $val) {
+                $sum += ($val['sell'] ?? 0) - ($val['sellReturn'] ?? 0);
+            }
 
-            $return[$cName][$start->getTimestamp()] = $value;
-            $return[$cName] = array_unique($return[$cName]);
+            $value = $start->format('d.m.y H:i') . '/' . $close->format('H:i') . ' ' . $hours;
+
+            $return[$cName][$start->getTimestamp()] = [
+                'time' => $value,
+                'sum' => $sum
+            ];
+
             krsort($return[$cName]);
         }
 
         //ksort($return);
         $message = '';
+        $itog = 0;
         foreach ($return as $user => $rows) {
             $i = 1;
-            $message .= $user . PHP_EOL;
+            $message .= '<b>' . $user . '</b>' . PHP_EOL;
+            $allSum = 0;
             foreach ($rows as $row) {
-                $message .= "-$i- " . $row . PHP_EOL;
+                $allSum += $row['sum'];
+                $message .= sprintf("-%s- %sч. %s руб." . PHP_EOL, $i, $row['time'], $row['sum']);
                 $i++;
             }
-            $message .= '==========================================' . PHP_EOL;
+            $message .= PHP_EOL;
+            $message .= 'Сумма: ' . number_format($allSum, 0, '.', ' ') . ' руб.' . PHP_EOL;
+            if ($allSum < 125000) {
+                $message .= sprintf("Процент выполнения: %s%%" . PHP_EOL, number_format(round(($allSum/125000)*100), 0, '.', ' '));
+                $message .= sprintf("До выполнения плана: %s" . PHP_EOL, number_format(125000 - $allSum, 0, '.', ' '));
+            } else {
+                $message .= "ПЛАН ВЫПОЛНЕН!!!" . PHP_EOL;
+            }
+            $message .= '======================================' . PHP_EOL;
+            $itog += $allSum;
         }
+        $message .= sprintf("ИТОГО ЗА %s: %s руб." . PHP_EOL, date("m.Y"), number_format($itog, 0, '.', ' '));
 
         return $message;
     }
