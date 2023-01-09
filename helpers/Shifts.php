@@ -10,6 +10,8 @@ class Shifts
     {
         date_default_timezone_set('Europe/Moscow');
 
+        $plan = 300000;
+        $plan1 = $plan / 2;
         $beginDate = new DateTime(date('Y-m-01'));
         $beginDate->modify('-1 day');
 
@@ -78,14 +80,14 @@ class Shifts
             }
             $message .= PHP_EOL;
             $message .= 'Сумма: ' . number_format($allSum, 0, '.', ' ') . 'руб.' . PHP_EOL;
-            if ($allSum < 125000) {
+            if ($allSum < $plan1) {
                 $message .= sprintf(
                     "Процент выполнения: %s%%" . PHP_EOL,
-                    number_format(round(($allSum / 125000) * 100), 0, '.', ' ')
+                    number_format(round(($allSum / $plan1) * 100), 0, '.', ' ')
                 );
                 $message .= sprintf(
                     "До выполнения плана: %sруб." . PHP_EOL,
-                    number_format(125000 - $allSum, 0, '.', ' ')
+                    number_format($plan1 - $allSum, 0, '.', ' ')
                 );
             } else {
                 $message .= "ПЛАН ВЫПОЛНЕН!!!" . PHP_EOL;
@@ -96,7 +98,7 @@ class Shifts
         $message .= sprintf("= ИТОГО ЗА %s: %sруб." . PHP_EOL, date("m.Y"), number_format($itog, 0, '.', ' '));
         $message .= sprintf(
             "= ПЛАН ВЫПОЛНЕН НА %s%%" . PHP_EOL,
-            number_format(round(($itog / 250000) * 100), 0, '.', ' ')
+            number_format(round(($itog / $plan) * 100), 0, '.', ' ')
         );
         $message .= '======================================' . PHP_EOL;
 
