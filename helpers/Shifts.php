@@ -63,25 +63,42 @@ class Shifts
         $itog = 0;
         foreach ($return as $user => $rows) {
             $i = 1;
+            $message .= '============' . PHP_EOL;
             $message .= '<b>' . $user . '</b>' . PHP_EOL;
             $allSum = 0;
             foreach ($rows as $row) {
                 $allSum += $row['sum'];
-                $message .= sprintf("-%s- %sч. %s руб." . PHP_EOL, $i, $row['time'], $row['sum']);
+                $message .= sprintf(
+                    "%s. %sч. %sруб." . PHP_EOL,
+                    $i,
+                    $row['time'],
+                    number_format($row['sum'], 0, '.', ' ')
+                );
                 $i++;
             }
             $message .= PHP_EOL;
-            $message .= 'Сумма: ' . number_format($allSum, 0, '.', ' ') . ' руб.' . PHP_EOL;
+            $message .= 'Сумма: ' . number_format($allSum, 0, '.', ' ') . 'руб.' . PHP_EOL;
             if ($allSum < 125000) {
-                $message .= sprintf("Процент выполнения: %s%%" . PHP_EOL, number_format(round(($allSum/125000)*100), 0, '.', ' '));
-                $message .= sprintf("До выполнения плана: %s" . PHP_EOL, number_format(125000 - $allSum, 0, '.', ' '));
+                $message .= sprintf(
+                    "Процент выполнения: %s%%" . PHP_EOL,
+                    number_format(round(($allSum / 125000) * 100), 0, '.', ' ')
+                );
+                $message .= sprintf(
+                    "До выполнения плана: %sруб." . PHP_EOL,
+                    number_format(125000 - $allSum, 0, '.', ' ')
+                );
             } else {
                 $message .= "ПЛАН ВЫПОЛНЕН!!!" . PHP_EOL;
             }
-            $message .= '======================================' . PHP_EOL;
             $itog += $allSum;
         }
-        $message .= sprintf("ИТОГО ЗА %s: %s руб." . PHP_EOL, date("m.Y"), number_format($itog, 0, '.', ' '));
+        $message .= '======================================' . PHP_EOL;
+        $message .= sprintf("= ИТОГО ЗА %s: %sруб." . PHP_EOL, date("m.Y"), number_format($itog, 0, '.', ' '));
+        $message .= sprintf(
+            "= ПЛАН ВЫПОЛНЕН НА %s%%" . PHP_EOL,
+            number_format(round(($itog / 250000) * 100), 0, '.', ' ')
+        );
+        $message .= '======================================' . PHP_EOL;
 
         return $message;
     }
