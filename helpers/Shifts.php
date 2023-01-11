@@ -65,7 +65,8 @@ class Shifts
         $itog = 0;
         foreach ($return as $user => $rows) {
             $i = 1;
-            $message .= '============' . PHP_EOL;
+            $message .= PHP_EOL;
+            $message .= str_pad('=', 40,' =') . PHP_EOL;
             $message .= '<b>' . $user . '</b>' . PHP_EOL;
             $allSum = 0;
             foreach ($rows as $row) {
@@ -94,6 +95,7 @@ class Shifts
             }
             $itog += $allSum;
         }
+        $message .= PHP_EOL;
         $message .= '======================================' . PHP_EOL;
         $message .= sprintf("= ИТОГО ЗА %s: %sруб." . PHP_EOL, date("m.Y"), number_format($itog, 0, '.', ' '));
         $message .= sprintf(
