@@ -20,7 +20,7 @@ class Shifts
                 [
                     'page' => 0,
                     'pageSize' => 100,
-                    'filtered' => ['beginDate' => $beginDate->format('Y-m-d') . 'T23:59:00']
+                    'filtered' => ['beginDate' => $beginDate->format('Y-m-d') . 'T23:00:00']
                 ]
             );
         $return = [];
@@ -35,7 +35,7 @@ class Shifts
 
             $diff = $close->diff($start);
             $hour = $diff->format('%h');
-            if ($hour <= 1) {
+            if ($hour <= 1 && $start->format('d') !== date('d')) {
                 continue;
             }
             $cName = $row['cashierOpened']['name'] ?? 'DeletedUser';
@@ -71,7 +71,7 @@ class Shifts
             foreach ($rows as $row) {
                 $allSum += $row['sum'];
                 $message .= sprintf(
-                    "%s. %sч. %sруб." . PHP_EOL,
+                    "%s. %sч. (%s руб.)" . PHP_EOL,
                     $i,
                     $row['time'],
                     number_format($row['sum'], 0, '.', ' ')
