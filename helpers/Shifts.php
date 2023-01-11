@@ -20,7 +20,7 @@ class Shifts
                 [
                     'page' => 0,
                     'pageSize' => 100,
-                    'filtered' => ['beginDate' => $beginDate->format('Y-m-d') . 'T23:00:00']
+                    'filtered' => ['beginDate' => $beginDate->format('Y-m-d') . 'T23:59:00']
                 ]
             );
         $return = [];
