@@ -6,13 +6,10 @@ use app\helpers\Amount;
 use app\helpers\Balance;
 use app\helpers\ClientHelper;
 use app\helpers\SendCommand;
-use app\helpers\Shifts;
 use app\helpers\SlashCommand;
 use app\helpers\ViewHelper;
 use app\models\Card;
-use app\models\Category;
 use app\models\Good;
-use app\models\GoodSite;
 use app\models\Group;
 use app\models\User;
 use app\service\AqsiApi;
@@ -32,7 +29,17 @@ class BotController extends \yii\console\Controller
 
     public function actionTest()
     {
-        print_r(Shifts::get());
+        $models = Good::find()->all();
+        $cat = [];
+        foreach ($models as $model) {
+            if (!isset($cat[md5($model->group_name)])) {
+                $cat[md5($model->group_name)] = $model->group_name;
+            }
+        }
+        echo $this->renderPartial('ya', [
+            'categories' => $cat,
+            'goods' => $models
+        ]);
     }
 
     public function actionAmount()
