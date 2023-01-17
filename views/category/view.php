@@ -32,9 +32,9 @@
     <thead>
     <tr>
         <th>#</th>
-        <th>Картинка</th>
+        <th style="width: 120px;">Картинка</th>
         <th>Название</th>
-        <th>Наличие</th>
+        <th style="width: 120px;">Наличие</th>
     </tr>
     </thead>
     <tbody>
