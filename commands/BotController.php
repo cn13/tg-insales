@@ -37,7 +37,7 @@ class BotController extends \yii\console\Controller
             }
         }
         file_put_contents(
-            __DIR__ . '../runtime/ya.yml',
+            __DIR__ . '/../runtime/ya.yml',
             $this->renderPartial('ya', [
                 'categories' => $cat,
                 'goods' => $models
