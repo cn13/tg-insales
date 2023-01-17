@@ -35,21 +35,25 @@ class BotController extends \yii\console\Controller
     {
         $models = Good::find()->where(['deleted' => 0])->andWhere(['<>', 'balance', 0])->all();
         $cat = [];
+
+        $goods = [];
         foreach ($models as $model) {
-            if ($model->hasImage() && !isset($cat[md5($model->group_name)])) {
-                $cat[md5($model->group_name)] = $model->group_name;
+            if ($model->hasImage()) {
+                $goods[] = $model;
             }
         }
 
-        $models = array_map(static function ($model) {
-            return $model->hasImage();
-        }, $models);
+        foreach ($goods as $model) {
+            if (!isset($cat[md5($model->group_name)])) {
+                $cat[md5($model->group_name)] = $model->group_name;
+            }
+        }
 
         file_put_contents(
             __DIR__ . '/../runtime/ya.yml',
             $this->renderPartial('ya', [
                 'categories' => $cat,
-                'goods' => $models
+                'goods' => $goods
             ])
         );
     }
