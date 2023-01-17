@@ -29,12 +29,11 @@ class BotController extends \yii\console\Controller
 
     public function actionTest()
     {
-
     }
 
     public function actionYandex()
     {
-        $models = Good::find()->where(['deleted' => 0])->all();
+        $models = Good::find()->where(['deleted' => 0])->andWhere(['<>', 'balance', 0])->all();
         $cat = [];
         foreach ($models as $model) {
             if (!isset($cat[md5($model->group_name)])) {
