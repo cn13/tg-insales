@@ -63,8 +63,8 @@
                 ?>
             </td>
             <td><?= $good->name ?></td>
-            <td><i class="fa fa-<?= $good->balance > 0 ? "check" : "close" ?>"></i></td>
-            <td><?= $good->price ?> руб</td>
+            <td>Наличие <i class="fa fa-<?= $good->balance > 0 ? "check" : "close" ?>"></i></td>
+            <!--td><?= $good->price ?> руб</td-->
         </tr>
     <?php
     endforeach; ?>
