@@ -13,7 +13,12 @@ class CategoryController extends \yii\web\Controller
         if ($category) {
             $this->view->title = ($category->name ?? '') . ' - ';
         }
-        $goods = Good::find()->where(['group_id' => $id, 'deleted' => 0])->orderBy(['name' => SORT_ASC, 'balance' => SORT_ASC])->all();
+        $goods = Good::find()->where(['group_id' => $id, 'deleted' => 0])->orderBy(
+            [
+                'balance' => SORT_DESC,
+                'name' => SORT_ASC
+            ]
+        )->all();
         return $this->render('view', ['goods' => $goods]);
     }
 }
