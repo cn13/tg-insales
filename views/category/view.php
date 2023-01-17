@@ -31,7 +31,7 @@
 <table class="table table-hover table-image">
     <thead>
     <tr>
-        <th>#</th>
+        <th style="width: 30px;">#</th>
         <th style="width: 120px;">Картинка</th>
         <th>Название</th>
         <th style="width: 120px;">Наличие</th>
