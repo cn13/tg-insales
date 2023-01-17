@@ -29,17 +29,20 @@ class BotController extends \yii\console\Controller
 
     public function actionTest()
     {
-        $models = Good::find()->all();
+        $models = Good::find()->where(['deleted' => 0])->all();
         $cat = [];
         foreach ($models as $model) {
             if (!isset($cat[md5($model->group_name)])) {
                 $cat[md5($model->group_name)] = $model->group_name;
             }
         }
-        echo $this->renderPartial('ya', [
-            'categories' => $cat,
-            'goods' => $models
-        ]);
+        file_put_contents(
+            __DIR__ . '../runtime/ya.yml',
+            $this->renderPartial('ya', [
+                'categories' => $cat,
+                'goods' => $models
+            ])
+        );
     }
 
     public function actionAmount()
