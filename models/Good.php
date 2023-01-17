@@ -68,4 +68,14 @@ class Good extends ActiveRecord
         }
         return $fileName;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasImage(): bool
+    {
+        $fileDir = __DIR__ . '/../../smokelife.ru/images/';
+        $fileName = 'item_' . $this->id . '.jpg';
+        return file_exists($fileDir . $fileName);
+    }
 }
