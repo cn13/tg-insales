@@ -61,7 +61,6 @@ class BotController extends \yii\console\Controller
     public function actionAmount()
     {
         $balance = Amount::getAmount();
-        echo 'Запуск обновления сумм и количества покупок' . PHP_EOL;
         foreach ($balance as $id => $row) {
             $model = User::find()->where(['user_id' => $id])->one();
             if ($model) {
