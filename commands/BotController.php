@@ -72,8 +72,6 @@ class BotController extends \yii\console\Controller
                 if (!$model->save()) {
                     print_r($model->getFirstErrors());
                 }
-            } else {
-                echo 'user not found: ' . $id . PHP_EOL;
             }
         }
     }
@@ -260,12 +258,19 @@ class BotController extends \yii\console\Controller
         }
         chmod($checkDir, 0777);
 
-        $result = (new AqsiApi())->getReceipts(
-            [
-                'filtered.BeginDate' => date('Y-m-d 00:00:00'),
-                'pageSize' => 100
-            ]
-        );
+        try {
+            $result = (new AqsiApi())->getReceipts(
+                [
+                    'filtered.BeginDate' => date('Y-m-d 00:00:00'),
+                    'pageSize' => 100
+                ]
+            );
+        } catch (\Throwable $e) {
+            echo 'Ошибка обновления чеков!!!' . PHP_EOL;
+            echo $e->getMessage();
+            exit;
+        }
+
 
         if (empty($result['rows'])) {
             \Yii::$app->end();
