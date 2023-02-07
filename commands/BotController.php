@@ -83,6 +83,7 @@ class BotController extends \yii\console\Controller
             $model = Good::findOne($row['id']);
             if ($model) {
                 $model->setAttribute('price', $row['price']);
+                $model->setAttribute('deleted', 0);
                 $model->setAttribute('balance', $row['balance']);
                 $model->setAttribute('group_id', $row['group_id']);
                 $model->setAttribute('group_name', $row['group_name']);
