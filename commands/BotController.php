@@ -139,11 +139,13 @@ class BotController extends \yii\console\Controller
                 );
             } elseif ($user->active == 1) {
                 $cardNumber = trim($clientAqsi['loyaltyCard']['prefix'] . $clientAqsi['loyaltyCard']['number']);
+
                 $cardInDB = $user->getCard();
                 if ($cardInDB === null) {
                     return;
                 }
                 $cardInDB = $cardInDB->number;
+
                 if ($cardNumber !== $cardInDB) {
                     $card = Card::find()->where(['number' => $cardNumber])->one();
                     if (!$card) {
@@ -153,7 +155,9 @@ class BotController extends \yii\console\Controller
                                 'value' => $prefix[$clientAqsi['loyaltyCard']['prefix']]
                             ]
                         );
-                        $card->save();
+                        if (!$card->save()) {
+                            throw new Exception(print_r($card->getFirstErrors(), 1));
+                        }
                     }
                     $user->setCard($card);
                     $sender->sendMessage(
